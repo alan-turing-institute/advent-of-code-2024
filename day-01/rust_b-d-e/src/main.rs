@@ -44,14 +44,12 @@ fn main() {
 
     let mut similarity: i32 = 0; // running total
 
-    // HashMap to count occurrences in col2
-    // i32 (number) -> i32 (occurences)
-    let mut num_counts: HashMap<i32, i32> = HashMap::new();
-    // populate hashmap with counts from col2
-    for &num in col2.iter() {
-        // increment count for num, creating first if necessary
-        *num_counts.entry(num).or_insert(0) += 1;
-    }
+    let num_counts: HashMap<i32, i32> = col2.iter()
+    .fold(HashMap::new(), |mut map, &num| {
+        *map.entry(num).or_insert(0) += 1;
+        map
+    });
+
 
     // iterate through col1 and multiply by counts from HashMap
     for &num in col1.iter() {
