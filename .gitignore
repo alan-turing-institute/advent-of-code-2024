@@ -1,0 +1,8 @@
+# AOC inputs should not be shared online
+input.txt
+test.txt
+
+# OCaml
+*.byte
+*.cmi
+*.cmo
