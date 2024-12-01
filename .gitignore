@@ -2,6 +2,9 @@
 input.txt
 test.txt
 
+# vscode
+.vscode
+
 # OCaml
 *.byte
 *.cmi
