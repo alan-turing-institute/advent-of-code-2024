@@ -1,6 +1,7 @@
 # AOC inputs should not be shared online
 input.txt
 test.txt
+example_input.txt
 
 # vscode
 .vscode
