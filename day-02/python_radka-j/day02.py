@@ -3,11 +3,8 @@ with open("input.txt") as f:
 
 reports = [[int(char) for char in l.split(" ")] for l in lines]
 
-safe_count_part1 = 0
-safe_count_part2 = 0
 
-
-def check(report):
+def safe(report):
     increase = [l1 < l2 for l1, l2 in zip(report[:-1], report[1:])]
     decrease = [l1 > l2 for l1, l2 in zip(report[:-1], report[1:])]
     unsafe_diff = [abs(l1 - l2) > 3 for l1, l2 in zip(report[:-1], report[1:])]
@@ -17,15 +14,18 @@ def check(report):
     return False
 
 
+safe_count_part1 = 0
+safe_count_part2 = 0
+
 for report in reports:
-    if check(report):
+    if safe(report):
         safe_count_part1 += 1
         safe_count_part2 += 1
     else:
         # investigate whether dropping any level can make the report safe
         for i in range(len(report)):
             drop_level = report[:i] + report[i + 1 :]
-            if check(drop_level):
+            if safe(drop_level):
                 safe_count_part2 += 1
                 break
 
