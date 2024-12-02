@@ -3,8 +3,6 @@ package main
 import (
   "fmt"
   "os"
-  // "io"
-  // "encoding/csv"
   "strings"
   "strconv"
   "bufio"
@@ -46,12 +44,12 @@ func ReadNumbersFromFile(fpath string) ([]int, []int, error) {
   return result1, result2, nil
 }
 
-// no checking if lengths are the same :(
 func SubtractSlicesAbsolute(slice1, slice2 []int) ([]int, error) {
 
   var result []int
 
   if len(slice1) == len(slice2) {
+    // Not explicitly stated but assuming they want the absolute difference
     for i := range slice1 {
       if slice1[i] > slice2[i] {
         result = append(result, slice1[i]-slice2[i])
@@ -82,24 +80,23 @@ func SimilarityScore(slice1, slice2 []int) (int) {
 
 func main() {
 
-  ids1, ids2, _ := ReadNumbersFromFile("input.txt")
+  var filename string = "input.txt"
 
-  // fmt.Println("First list: ", ids1)
-  // fmt.Println("Second list: ", ids2)
+  // Read the puzzle data
+  ids1, ids2, _ := ReadNumbersFromFile(filename)
 
   slices.Sort(ids1)
   slices.Sort(ids2)
 
+  // Get absolute difference of the two sorted ID lists
   distances, _ := SubtractSlicesAbsolute(ids1, ids2)
-
+  // Sum of distances
   var result int
-
-  for _, num := range distances {
-    result += num
-  }
-
+  for _, num := range distances { result += num }
+  // \o/
   fmt.Println("Part 1: ", result)
 
+  // Part 2 fully implemented in SimilarityScore()
   fmt.Println("Part 2: ", SimilarityScore(ids1, ids2))
 
 }
