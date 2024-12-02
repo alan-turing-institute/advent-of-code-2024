@@ -31,8 +31,7 @@ fn main() {
     println!("Safe reports: {:?}", part_one(&report_data));
 
     // part two
-    println!("Safe reports with max one error: {:?} - BROKEN VERSION", part_two(&report_data));
-    println!("Safe reports with max one error: {:?} - BRUTE FORCE VERSION", part_two_brute_force(&report_data));
+    println!("Safe reports with max one error: {:?}", part_two(&report_data));
 }
 
 fn check_safe(report: &Vec<i32>) -> (bool, i32) {
@@ -54,37 +53,6 @@ fn check_safe(report: &Vec<i32>) -> (bool, i32) {
 
     (true, -1)
 }
-
-// fn check_safe(report: &Vec<i32>) -> (bool, i32) {
-//     // check if a single report is safe
-//     if report.len() < 2 {
-//         return (true, -1);
-//     }
-
-//     let mut safe: bool = true;
-//     let increasing: bool = report[0] < report[1];
-//     let mut bad_idx: i32 = -1;
-//     for i in 0..report.len() - 1 {
-//         // check all increasing or decreasing
-//         if (report[i] < report[i + 1]) != increasing {
-//             safe = false;
-//         }
-//         // check diferences >=1 and <=3
-//         let diff = (report[i + 1] - report[i]).abs();
-//         if diff > 3 {
-//             safe = false;
-//         }
-//         if diff < 1 {
-//             safe = false;
-//         }
-//         if !safe {
-//             bad_idx = i as i32;
-//             break;
-//         }
-//     }
-
-//     (safe, bad_idx)
-// }
 
 fn part_one(all_reports: &Vec<Vec<i32>>) -> i32 {
     // how many reports are 'safe'?
@@ -120,46 +88,19 @@ fn part_two(all_reports: &Vec<Vec<i32>>) -> i32 {
             let mut new_report = report.clone();
             new_report.remove((bad_idx) as usize);
             let (mut safe, _) = check_safe(&new_report);
-            // if not, also check i+1
+            // if not, also check i+1 and 0
             if !safe {
                 new_report = report.clone();
                 new_report.remove((bad_idx + 1) as usize);
                 (safe, _) = check_safe(&new_report);
-            }
-            safe_reports += safe as i32;
-        } else {
-            safe_reports += 1;
-        }
-    }
 
-    safe_reports
-}
-
-
-fn part_two_brute_force(all_reports: &Vec<Vec<i32>>) -> i32 {
-    // how many reports are 'safe'?
-    // i.e. lists of numbers that are:
-    // ((strictly increasing) OR (strictly decreasing)) AND (differ by at least 1) AND (differ by at most 3)
-    // BUT here if removing a SINGLE number from the list makes it safe, it is also safe
-
-    let mut safe_reports: i32 = 0;
-
-    for report in all_reports {
-
-        // check if the report is safe
-        let safe = check_safe(report).0;
-
-        // if the report is not safe, check if removing ANY single value from the list makes it safe
-        if !safe {
-            for i in 0..report.len() {
-                let mut new_report = report.clone();
-                new_report.remove(i);
-                let (safe, _) = check_safe(&new_report);
-                if safe {
-                    safe_reports += 1;
-                    break;
+                if !safe {
+                    new_report = report.clone();
+                    new_report.remove(0);
+                    (safe, _) = check_safe(&new_report);
                 }
             }
+            safe_reports += safe as i32;
         } else {
             safe_reports += 1;
         }
