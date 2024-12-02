@@ -41,10 +41,8 @@ if __name__ == "__main__":
     print("Solution to Part 1 ", report_count)
 
     # part 2
-    report_count_2 = 0
+    report_count_2 = report_count
     for report in data:
-        if check_condition(report):
-            report_count_2 += 1
-        elif drop_level_check(report):
+        if not check_condition(report) and drop_level_check(report):
             report_count_2 += 1
     print("Solution to Part 2 ", report_count_2)
