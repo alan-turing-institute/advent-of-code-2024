@@ -59,13 +59,9 @@ fn part_one(all_reports: &Vec<Vec<i32>>) -> i32 {
     // i.e. lists of numbers that are:
     // ((strictly increasing) OR (strictly decreasing)) AND (differ by at least 1) AND (differ by at most 3)
 
-    let mut safe_reports: i32 = 0;
-
-    for report in all_reports {
-        safe_reports += check_safe(report).0 as i32;
-    }
-
-    safe_reports
+    all_reports.iter()
+    .map(|report| check_safe(report).0 as i32)
+    .sum()
 }
 
 
