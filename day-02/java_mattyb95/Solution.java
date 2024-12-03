@@ -1,5 +1,3 @@
-package Year2024.Day2;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
