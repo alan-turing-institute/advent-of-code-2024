@@ -6,7 +6,7 @@
 (define (file->string path) 
   (get-string-all (open-input-file path)))
 
-;; A regular expressions that matches 'mul(a,b)' where a and b are two numbers from 1 to 999
+;; A regular expressions that matches 'mul(a,b)' where a and b are two numbers from 0 to 999
 (define r (make-regexp "mul\\([0-9]?[0-9]{1,2},[0-9]?[0-9]{1,2}\\)"))
 
 ;; for each multiply-expression, return the product of its two numbers
