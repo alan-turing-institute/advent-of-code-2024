@@ -46,16 +46,16 @@
 (define *search-word* (string->list "XMAS"))
 
 ;; word-at? : grid? (list-of char?) posn? dir? -> bool?
-;; Does word chars exist in the grid at position pos and direction dir?
-
+;; Does word `chars` exist in the grid at position pos and direction dir?
 (define (word-at? grid chars pos dir)
-  ;; (displayln (format "Looking for ~a at ~a heading ~a" (car chars) pos dir))
-  (or (null? chars)                    ; if we're at the end of the search word, we're done
-      (and (grid-pos-inside? grid pos) ; if we're outside the grid, we have not found the word
+  (or (null? chars)                                          ; No more letters? Done
+      (and (grid-pos-inside? grid pos)                       ; Outside the grid? Not found
            (char=? (car chars) (grid-ref grid pos))
-           (word-at? grid (cdr chars) (pos+ pos dir) dir)))) ; and recurse on the rest of the word
+           (word-at? grid (cdr chars) (pos+ pos dir) dir)))) ; ... and recurse on rest of word
+
 
 ;; ------------------------------------------------------------------------------------------
+;; Testing
 
 (module+ test
 
