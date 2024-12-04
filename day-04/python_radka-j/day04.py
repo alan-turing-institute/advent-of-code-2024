@@ -7,7 +7,7 @@ grid = [list(l) for l in lines]
 # ===========================================
 # HELPER FUNCTIONS
 #
-# all return the originally position if we can't move in a given direction
+# all return start position if we can't move in a given direction
 # since it won't have a new letter and so search won't continue
 # ===========================================
 
@@ -106,30 +106,28 @@ print("Part 1: ", tot)
 
 def check_mas(i, j):
     """
-    Check if there is a MAS in an x-shape
+    Check if there is a "MAS" in an X-shape.
     """
-    found = False
     if grid[i][j] == "A":
-        # get the diagonal letters
+
+        # get all letters diagonally from "A"
         i_, j_ = go_right_up(i, j)
         ru = grid[i_][j_]
+
         i_, j_ = go_left_up(i, j)
         lu = grid[i_][j_]
+
         i_, j_ = go_right_down(i, j)
         rd = grid[i_][j_]
+
         i_, j_ = go_left_down(i, j)
         ld = grid[i_][j_]
 
-        if ru == "M" and ld == "S" and lu == "M" and rd == "S":
-            found = True
-        elif ru == "S" and ld == "M" and lu == "S" and rd == "M":
-            found = True
-        elif ru == "M" and ld == "S" and lu == "S" and rd == "M":
-            found = True
-        elif ru == "S" and ld == "M" and lu == "M" and rd == "S":
-            found = True
+        if (ru == "M" and ld == "S") or (ru == "S" and ld == "M"):
+            if (lu == "M" and rd == "S") or (lu == "S" and rd == "M"):
+                return True
 
-    return found
+    return False
 
 
 tot = 0
