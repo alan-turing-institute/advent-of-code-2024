@@ -32,12 +32,6 @@ def count(data, string, reverse=False):
                 continue
     return count_h
 
-
-def find_letter_index(data, letter):
-    index = np.where(data == letter)
-    return index
-
-
 if __name__ == "__main__":
 
     # file_name = "test.txt"
