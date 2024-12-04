@@ -65,7 +65,7 @@ if __name__ == "__main__":
     print("Solution for Part 1:",count_h + count_v + count_h_r + count_v_r + count_d + count_d_r + count_d_F + count_d_F_r)
 
     ### Part2
-    indexes = index = np.where(data == "A")
+    indexes = np.where(data == "A")
     count_x = 0
 
     for i in range(0, len(indexes[0])):
