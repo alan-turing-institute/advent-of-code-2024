@@ -2,9 +2,6 @@
 
 (require "grid.rkt") ; Stolen from my 2023 code.
 
-
-
-
 (module+ main
 
   (define *word-search-grid*
@@ -42,7 +39,23 @@
           1
           0))))
 
+;; ------------------------------------------------------------------------------------------
 
+(define *compass* '((0 . 1) (1 . 1) (1 . 0) (1 . -1) (0 . -1) (-1 . -1) (-1 . 0) (-1 . 1)))
+
+(define *search-word* (string->list "XMAS"))
+
+;; word-at? : grid? (list-of char?) posn? dir? -> bool?
+;; Does word chars exist in the grid at position pos and direction dir?
+
+(define (word-at? grid chars pos dir)
+  ;; (displayln (format "Looking for ~a at ~a heading ~a" (car chars) pos dir))
+  (or (null? chars)                    ; if we're at the end of the search word, we're done
+      (and (grid-pos-inside? grid pos) ; if we're outside the grid, we have not found the word
+           (char=? (car chars) (grid-ref grid pos))
+           (word-at? grid (cdr chars) (pos+ pos dir) dir)))) ; and recurse on the rest of the word
+
+;; ------------------------------------------------------------------------------------------
 
 (module+ test
 
@@ -58,7 +71,7 @@ SAXAMASAAA
 MAMMMXMMMM
 MXMXAXMASX
 END
-)
+    )
 
   (define *word-search-grid*
     (lists->grid (map string->list (string-split *input*))))
@@ -89,26 +102,3 @@ END
           1
           0))))
 
-;; ------------------------------------------------------------------------------------------
-
-(define *compass* '((0 . 1) (1 . 1) (1 . 0) (1 . -1) (0 . -1) (-1 . -1) (-1 . 0) (-1 . 1)))
-
-(define *search-word* (string->list "XMAS"))
-
-
-
-;; word-at? : grid? (list-of char?) posn? dir? -> bool?
-;; Does word chars exist in the grid at position pos and direction dir?
-
-(define (word-at? grid chars pos dir)
-  ;; (displayln (format "Looking for ~a at ~a heading ~a" (car chars) pos dir))
-  (or (null? chars)                    ; if we're at the end of the search word, we're done
-      (and (grid-pos-inside? grid pos) ; if we're outside the grid, we have not found the word
-           (char=? (car chars) (grid-ref grid pos))
-           (word-at? grid (cdr chars) (pos+ pos dir) dir)))) ; and recurse on the rest of the word
-
-;; grid-ref/safe
-;; like grid-ref but returns #f if pos is not in the grid
-(define (grid-ref/safe grid pos)
-  (and (grid-pos-inside? grid pos)
-       (grid-ref grid pos)))
