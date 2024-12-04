@@ -14,12 +14,12 @@ def parse_file(file_path):
     return grid
 
 
-def check_right(grid, word=['X', 'M', 'A', 'S']):
+def check_right(grid):
     count_internal = 0
     for row in grid:
         for j, letter in enumerate(row):
             if letter == 'X':
-                if list(row[j:j+4]) == word:
+                if list(row[j:j+4]) == ['X', 'M', 'A', 'S']:
                     count_internal += 1
     return count_internal
 
