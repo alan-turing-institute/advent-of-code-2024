@@ -18,29 +18,22 @@
 
 ;; Main Functions ------------------------------------------------------------------------
 
-(define (rule_string->rules rule_data)
+(define (rules_path->rules rules_path)
   (map (lambda (str)
 	 (define elements (string-split str #\|))
 	 (map string->number (list (car elements) (car (cdr elements))))
-	 ) (string-split rule_data #\newline)))
+	 ) (string-split (get-string-all (open-input-file rules_path)) #\newline)))
 
-(define (update_string->updates updates_data)
+(define (updates_path->updates updates_path)
   (map (lambda (line)
 	(map (lambda (x) (string->number x)) (string-split line #\,)))
-      (string-split updates_data #\newline)))
+      (string-split (get-string-all (open-input-file updates_path)) #\newline)))
 
 (define (compliant? pair rules)
   (not (eq? #f (member pair rules))))
 
 (define (is-update-compliant? update rules)
-  (not (member #f
-	       (map (lambda (pair) (compliant? pair rules)) update ))))
-
-(define (updates_port->updates port)
-  (update_string->updates (get-string-all port)))
-
-(define (rules_port->rules port)
-  (rule_string->rules (get-string-all port)))
+  (not (member #f (map (lambda (pair) (compliant? pair rules)) update ))))
 
 ;; Quicksort implementation for sorting updates
 (define (sort-update lst rules)
@@ -56,8 +49,9 @@
 
 ;; ---------------------------------------------------------------------------------------
 
-(define rules (rules_port->rules (open-input-file "rules"))) ; can't find how to string-split on a double new line
-(define updates (updates_port->updates (open-input-file "updates")))
+; can't find how to string-split on a double new line
+(define rules (rules_path->rules "rules")) 
+(define updates (updates_path->updates "updates"))
 
 (define compliant_updates
   (filter (lambda (update)
@@ -71,5 +65,4 @@
 (display (string-append "Answer to Part One: "
 			(number->string (apply + (map middle-of-list compliant_updates)))
 			"\nAnswer to Part Two: "
-			(number->string (apply + (map middle-of-list (map (lambda (update) (sort-update update rules)) non_compliant_updates))))
-			))
+			(number->string (apply + (map middle-of-list (map (lambda (update) (sort-update update rules)) non_compliant_updates))))))
