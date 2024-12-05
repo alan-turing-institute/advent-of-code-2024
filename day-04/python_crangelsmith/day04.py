@@ -34,6 +34,9 @@ def count(data, string, reverse=False):
 
 if __name__ == "__main__":
 
+    import time
+
+    time_start1 = time.time()
     # file_name = "test.txt"
     file_name = "input_day4.txt"
 
@@ -63,6 +66,7 @@ if __name__ == "__main__":
     count_d_F_r = count(diagonals_flip, 'XMAS', reverse=True)
 
     print("Solution for Part 1:",count_h + count_v + count_h_r + count_v_r + count_d + count_d_r + count_d_F + count_d_F_r)
+    time_end1 = time.time()
 
     ### Part2
     indexes = np.where(data == "A")
@@ -84,3 +88,8 @@ if __name__ == "__main__":
                 count_x += 1
 
     print("Solution for Part 2:", count_x)
+    time_end2 = time.time()
+
+
+    print("Time for Part 1:", time_end1 - time_start1)
+    print("Time for Part 2:", time_end2 - time_end1)
