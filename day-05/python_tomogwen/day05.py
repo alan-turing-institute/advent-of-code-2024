@@ -37,6 +37,7 @@ if __name__ == "__main__":
     file_path = Path("input.txt")
     rules, updates = parse_file(file_path)
 
+    # define custom order using comparisons
     order = partial(custom_order, rules=rules)
     sorted_custom = partial(sorted, key=cmp_to_key(order))
     
