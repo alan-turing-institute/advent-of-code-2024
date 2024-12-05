@@ -9,17 +9,12 @@ from pathlib import Path
 
 
 def parse_file(file_path):
-    rules, updates = [], []
-    ordering_now = True
     with open(file_path, 'r') as file:
-        for line in file:
-            if ordering_now:
-                if line == "\n":
-                    ordering_now = False
-                else:
-                    rules.append([int(x) for x in line.strip().split("|")])
-            else:
-                updates.append([int(x) for x in line.strip().split(",")])
+        lines = file.readlines()
+
+    rules = [[int(x) for x in line.strip().split("|")] for line in lines if "|" in line]
+    updates = [[int(x) for x in line.strip().split(",")] for line in lines if "," in line]
+
     return rules, updates
 
 
