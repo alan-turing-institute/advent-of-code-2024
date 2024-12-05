@@ -1,15 +1,17 @@
-# Jack cheats at Advent of Code
+# 🎄🦹🏼‍♂️🤖 Jack Cheats at Advent of Code 2024 🤖🦹🏼‍♂️🎄
 
 I've not yet caught the habit of using chat-style code assistants, so let's give it a go. I don't expect to do many days but I'll make sure I don't do the current day to try to avoid climbing leaderboards...
 
 My goal is not to write any code myself and (in true Advent of Code spirit...) to spend as little time as possible understanding the problem/reading code to identify bugs. I'm starting with a basic prompt along the lines of:
 
 > Please write a Python script to solve the following problem:
+>
 > <copy-pasted part 1 problem text>
 
 and then:
 
 > Please update the solution for part 2 of the problem:
+>
 > <copy-pasted part 2 problem text>
 
 Using ChatGPT-4o.
@@ -50,3 +52,4 @@ Using ChatGPT-4o.
 - I'm getting solutions quickly (for first few days) but it's frustrating when it doesn't work, more frustrating than if it's my programming/logic at fault. After 4 days I already doubt whether I could get it to solve a harder problem without telling it the solution. I think this is a big part of why I'm yet to embrace chat interfaces much - if I need to articulate the solution and review the generated code for errors would it have been easier to just write it myself (maybe, but probably slower too)?
 - I'm not paying any attention to the explanations it gives after the script it generates. Maybe they would give clues for how to fix things/where there are issues in interpreting the problem.
 - So far, just telling it the output is wrong doesn't seem to be enough for it to spot/correct the error.
+- Sometimes it correctly articulates the problem in its descriptions around the code, but then the script itself misses some of the nuances in the problem/logic.
