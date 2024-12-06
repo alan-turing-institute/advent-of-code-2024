@@ -50,6 +50,7 @@ Using ChatGPT-4o.
 
 - Days 1 and 2 I have no idea what the problem or solution actually were, purely hands over to ChatGPT.
 - I'm getting solutions quickly (for first few days) but it's frustrating when it doesn't work, more frustrating than if it's my programming/logic at fault. After 4 days I already doubt whether I could get it to solve a harder problem without telling it the solution. I think this is a big part of why I'm yet to embrace chat interfaces much - if I need to articulate the solution and review the generated code for errors would it have been easier to just write it myself (maybe, but probably slower too)?
+  - but then day 5 gave me an existential crisis again.
 - I'm not paying any attention to the explanations it gives after the script it generates. Maybe they would give clues for how to fix things/where there are issues in interpreting the problem.
 - So far, just telling it the output is wrong doesn't seem to be enough for it to spot/correct the error.
 - Sometimes it correctly articulates the problem in its descriptions around the code, but then the script itself misses some of the nuances in the problem/logic.
