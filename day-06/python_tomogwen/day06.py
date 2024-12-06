@@ -1,6 +1,6 @@
 """
 Advent of Code 2024
-Day 05
+Day 06
 tomogwen
 """
 from pathlib import Path
