@@ -56,6 +56,5 @@ for pos in zip(*np.where(visited != 0)):
         new_map[pos] = OBSTACLE
         if find_visited(new_map, start_position, start_dir) is None:  # loop found
             answer += 1
-    print(pos, answer)
 
 print(answer)
