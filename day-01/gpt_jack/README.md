@@ -24,7 +24,7 @@ Using ChatGPT-4o.
 | 2  |  ✅ | 3 | ✅ | 1 | Solved without additional prompting. Additional part 1 prompts me hitting enter too soon and forgetting to tell it to load the input file again. |
 | 3  | ✅ | 1 | ✅ | 3 | Had to read the task and the code to get it to solve part 2, what a drag. There was a logic issue that it was able to fix when I pointed out the problem. It didn't change anything between the first 2 prompts (when I only told it the output was wrong, not the potential cause). |
 | 4  | ✅ | 1 | ✅ | 8 | Had to manually change the filename in the script for part 1. Was the biggest struggle so far to get it to understand part 2 correctly. It struggled to understand which MAS / SAM patterns were valid/invalid. The prompting was a lot of hand holding starting from the simplest possible example. |
-| 5  |  |  |  |  |  |
+| 5  | ✅ | 1 | ✅ | 1 | Over to the robot overlords today. Pretty sure this is one I would have spent a long time on myself as I doubt I would have immediately thought of topological sort/I would have implemented a broken version of it myself. ChatGPT commented the script to say it was using Kahn's algorithm, so it actually taught me something today. |
 | 6  |  |  |  |  |  |
 | 7  |  |  |  |  |  |
 | 8  |  |  |  |  |  |
