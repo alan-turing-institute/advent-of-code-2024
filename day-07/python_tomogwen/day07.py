@@ -1,6 +1,6 @@
 """
 Advent of Code 2024
-Day 06
+Day 07
 tomogwen
 """
 import itertools
