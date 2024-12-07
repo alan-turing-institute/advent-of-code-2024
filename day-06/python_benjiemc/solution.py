@@ -85,16 +85,6 @@ def part2(contents):
     rotation = np.array([[0, 1],
                          [-1, 0]])
 
-    possible_grids = []
-    for row_coord in range(grid.shape[0]):
-        for col_coord in range(grid.shape[1]):
-
-            if grid[row_coord, col_coord] not in ('#' '^', '>', '<', 'v'):
-                possible_grid = grid.copy()
-                possible_grid[row_coord, col_coord] = '&'
-
-                possible_grids.append(possible_grid)
-
     for row_coord in range(grid.shape[0]):
         for col_coord in range(grid.shape[1]):
 
@@ -104,14 +94,50 @@ def part2(contents):
 
                 grid[row_coord, col_coord] = '.'
 
+    unique_squares = set([])
+
+    guard_position = start_guard_position.copy()
+    direction = start_direction.copy()
+
+    while True:
+        # visualise_grid(guard_position, direction, grid)
+        potential_next_pos = guard_position + direction
+
+        if (potential_next_pos[0] >= grid.shape[0]
+                or potential_next_pos[0] < 0
+                or potential_next_pos[1] >= grid.shape[1]
+                or potential_next_pos[1] < 0):
+            break
+
+        elif grid[potential_next_pos[0], potential_next_pos[1]] == '#':
+            direction = rotation @ direction
+
+        else:
+            guard_position = potential_next_pos
+            unique_squares.add((guard_position[0], guard_position[1]))
+
+    unique_squares.remove((start_guard_position[0], start_guard_position[1]))
+
+    possible_grids = []
+    for row_coord, col_coord in unique_squares:
+        if grid[row_coord, col_coord] != '#':
+            possible_grid = grid.copy()
+            possible_grid[row_coord, col_coord] = '&'
+
+            possible_grids.append(possible_grid)
+
     count = 0
     for possible_grid in possible_grids:
-        path = []
+        path = set([])
         escaped = False
         guard_position = start_guard_position
         direction = start_direction
 
-        while not check_stuck(path):
+        while ((guard_position[0], guard_position[1]),
+               (direction[0], direction[1])) not in path:
+            path.add(((guard_position[0], guard_position[1]),
+                      (direction[0], direction[1])))
+
             # visualise_grid(guard_position, direction, possible_grid)
             potential_next_pos = guard_position + direction
 
@@ -127,7 +153,6 @@ def part2(contents):
 
             else:
                 guard_position = potential_next_pos
-                path.append((guard_position[0], guard_position[1]))
 
         if not escaped:
             count += 1
