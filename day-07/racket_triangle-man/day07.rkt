@@ -18,7 +18,7 @@
   
   (define *soluble-eqns/2*
     (filter
-     (λ (eqn) (soluble? (car eqn) (cdr eqn) (list + * concat)))
+     (λ (eqn) (soluble? (car eqn) (cdr eqn) (list + * ||)))
      *eqns*))
 
   (apply + (map car *soluble-eqns/2*))
@@ -35,6 +35,20 @@
              (map string->number (string-split (cadr tmp))))))
    (sequence->list (in-lines p))))
 
+;; Concatenation operator
+(define (|| a b)
+  (+ (* a 10 (expt 10 (order-of-magnitude b)))
+     b))
+
+;; Is this equation soluble? 
+(define (soluble? ans ns ops)
+  (for/or ([ops (apply cartesian-product (repeat (- (length ns) 1) ops))])
+    (equal? ans (eval-equation ns ops))))
+
+;; Build a list of length n consisting of v
+(define (repeat n v)
+  (build-list n (const v)))
+
 ;; ns -- a list of numbers
 ;; ops -- a list of binary operators, one fewer the the count of the numbers
 (define (eval-equation ns ops)
@@ -44,20 +58,6 @@
    (car ns)
    (cdr ns)
    ops))
-
-;; Build a list of length n consisting of v
-(define (repeat n v)
-  (build-list n (const v)))
-
-;; Is this equation soluble? 
-(define (soluble? ans ns ops)
-  (for/or ([ops (apply cartesian-product (repeat (- (length ns) 1) ops))])
-    (equal? ans (eval-equation ns ops))))
-
-;; Concatenation operator
-(define (concat a b)
-  (+ (* a 10 (expt 10 (order-of-magnitude b)))
-     b))
 
 
 ;; ------------------------------------------------------------------------------------------
@@ -93,7 +93,7 @@ END
   
   (define *soluble-eqns/2*
     (filter
-     (λ (eqn) (soluble? (car eqn) (cdr eqn) (list + * concat)))
+     (λ (eqn) (soluble? (car eqn) (cdr eqn) (list + * ||)))
      *eqns*))
 
   (apply + (map car *soluble-eqns/2*))
