@@ -26,7 +26,7 @@ fn part_one(input: &[(i64, Vec<i64>)]) -> i64 {
     let mut sum = 0;
 
     for (target, operands) in input {
-        if valid(*target, operands, operands.len() - 1, false) {
+        if valid_equation_exists(*target, operands, operands.len() - 1, false) {
             sum += target;
         }
     }
@@ -39,7 +39,7 @@ fn part_two(input: &[(i64, Vec<i64>)]) -> i64 {
 
     // same thing, but now can also have operator | which concatonates the numbers
     for (target, operands) in input {
-        if valid(*target, operands, operands.len() - 1, true) {
+        if valid_equation_exists(*target, operands, operands.len() - 1, true) {
             sum += target;
         }
     }
@@ -48,51 +48,41 @@ fn part_two(input: &[(i64, Vec<i64>)]) -> i64 {
 }
 
 
-fn valid(test_value: i64, terms: &[i64], index: usize, concat: bool) -> bool {
+fn valid_equation_exists(target: i64, operands: &[i64], index: usize, concat: bool) -> bool {
     // Base case: if we're at the first number, check if we've reached it
     if index == 0 {
-        return test_value == terms[0];
+        return target == operands[0];
     }
 
     // Try each possible operation working backwards
 
     // Addition: if result was a + b, then a = result - b
-    if test_value >= terms[index] &&
-       valid(test_value - terms[index], terms, index - 1, concat) {
+    if target >= operands[index] &&
+       valid_equation_exists(target - operands[index], operands, index - 1, concat) {
         return true;
     }
 
     // Multiplication: if result was a * b, then a = result / b
-    if test_value % terms[index] == 0 &&
-       valid(test_value / terms[index], terms, index - 1, concat) {
+    if target % operands[index] == 0 &&
+    valid_equation_exists(target / operands[index], operands, index - 1, concat) {
         return true;
     }
 
     // Concatenation: if result ends with b, then a is result/10^(digits in b)
     if concat {
         // Check if test_value ends with current term
-        let power = next_power_of_ten(terms[index]);
-        if test_value % power == terms[index] {
+        let power = closest_power_of_ten(operands[index]);
+        if target % power == operands[index] {
             // If it does, divide by appropriate power of 10 to get the left part
-            if valid(test_value / power, terms, index - 1, concat) {
+            if valid_equation_exists(target / power, operands, index - 1, concat) {
                 return true;
             }
         }
     }
 
-    false
+    false // cannot find a valid solution
 }
 
-fn next_power_of_ten(n: i64) -> i64 {
-    // helper to work out magnitude of number concatonated
-    if n < 10 {
-        10
-    } else if n < 100 {
-        100
-    } else if n < 1000 {
-        1000
-    }
-    else {
-        panic!("Unexpected number: {}", n);
-    }
+fn closest_power_of_ten(n: i64) -> i64 {
+    10_i64.pow((n.ilog10() + 1) as u32)
 }
