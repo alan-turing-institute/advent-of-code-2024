@@ -1,6 +1,4 @@
-
 import os
-import numpy as np
 import itertools
 
 
@@ -31,11 +29,9 @@ def operations(calibrations, combinations, reference_value):
                     result = int(result) + int(calibrations[counter + 1])
                 elif o == "*":
                     result = int(result) * int(calibrations[counter + 1])
-                #result = eval(str(result) + o + calibrations[counter + 1])
             counter += 1
 
         if reference_value == result:
-            print("Found it", comb, result)
             return result
 
     return 0
@@ -55,7 +51,7 @@ if __name__ == "__main__":
     data = [i.split(":") for i in data]
     data = [[i[0], i[1].split(" ")[1:]] for i in data]
 
-    n_combinations = np.unique([len(data[i][1])-1 for i in range(0, len(data))])
+    n_combinations = set([len(data[i][1])-1 for i in range(0, len(data))])
 
     possible_combinations_part1 = get_combinations(n_combinations, "+*")
     possible_combinations_part2 = get_combinations(n_combinations, "+*|")
