@@ -1,0 +1,1 @@
+Part 2 was the first one it didn't get right straightaway, and just asking it to try to correct it didn't work. I skimmed the problem statement and script and realised it wasn't doing the do/don't logic correctly. Prompting it with that got it to solve the problem.

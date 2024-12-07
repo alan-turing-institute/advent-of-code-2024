@@ -56,6 +56,8 @@ if __name__ == "__main__":
             final_correct_pages.append(get_middle(page))
         else:
             final_corrected_pages.append(get_middle(output_list))
+    time_start2 = time.time()
 
+    print('Time taken for part 1 and 2:', time_start2 - time_start1)
     print("Solution part 1:", sum(final_correct_pages))
     print("Solution part 2:", sum(final_corrected_pages))
