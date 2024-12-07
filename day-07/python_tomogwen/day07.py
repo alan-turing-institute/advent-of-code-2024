@@ -32,7 +32,7 @@ def concat(a: int, b: int) -> int:
 
 
 def check_if_possible(result, nums, allowed_ops):
-    for operations in itertools.product(allowed_ops, repeat=len(nums)):
+    for operations in itertools.product(allowed_ops, repeat=len(nums)-1):
         count = nums[0]
         for x, op in zip(nums[1:], operations):
             count = op(count, x)
