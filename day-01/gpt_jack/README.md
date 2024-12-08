@@ -26,7 +26,7 @@ Using ChatGPT-4o.
 | 4  | ✅ | 1 | ✅ | 8 | Had to manually change the filename in the script for part 1. Was the biggest struggle so far to get it to understand part 2 correctly. It struggled to understand which MAS / SAM patterns were valid/invalid. The prompting was a lot of hand holding starting from the simplest possible example. |
 | 5  | ✅ | 1 | ✅ | 1 | Over to the robot overlords today. Pretty sure this is one I would have spent a long time on myself as I doubt I would have immediately thought of topological sort/I would have implemented a broken version of it myself. ChatGPT commented the script to say it was using Kahn's algorithm, so it actually taught me something today. |
 | 6  | ✅ | 1 | ✅ | 1 | Part 2 solution was slow (38s). |
-| 7  |  |  |  |  |  |
+| 7  | ✅ | 2 | ✅ | 2 | First time the part 1 script was incorrect initially, but prompting it that it returned 0 for the example. Part 1 implementation took 34s to run. First part 2 implementation was too slow, but asking it to make it more efficient worked - added recursion and checking whether intermediate result had become too big. However, it mentioned memoization could make it more efficient but didn't add it to the script. |
 | 8  |  |  |  |  |  |
 | 9  |  |  |  |  |  |
 | 10  |  |  |  |  |  |
@@ -53,5 +53,7 @@ Using ChatGPT-4o.
   - but then day 5 gave me an existential crisis again.
 - I'm not paying any attention to the explanations it gives after the script it generates. Maybe they would give clues for how to fix things/where there are issues in interpreting the problem.
 - So far, just telling it the output is wrong doesn't seem to be enough for it to spot/correct the error.
+  - but this did work for day 7 part 1.
 - Sometimes it correctly articulates the problem in its descriptions around the code, but then the script itself misses some of the nuances in the problem/logic.
 - Can I be sure that ChatGPT isn't cheating itself? E.g. does it already have access to other people's answers? E.g. a "What was the problem for Advent of Code 2024, day 1?" prompt causes it to search the internet and return a summary and a link to a YouTube video of someone solving it...
+- Sometimes it asks you to evaluate a new version of ChatGPT by giving two outputs and asking you which you prefer.
