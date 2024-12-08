@@ -15,26 +15,27 @@
               '(())
               lists))
 
-(define (make-all-operator-lists equation)
-  (apply cartesian-product (make-list (- (length equation) 1) '(0 1))))
+(define (|| x y)
+  (string->number (string-append (number->string x) (number->string y))))
 
 ;; Part One ------------------------------------------------------------------------------
 
-(define (evaluate-equation equation operator_list)
-  (fold-right (lambda (elem1 elem2 previous)
-		(cond
-		 ((equal? elem2 0) (+ previous elem1))
-		 ((equal? elem2 1) (* previous elem1))))
-	      (car equation)
-	      (reverse (cdr equation)) 
-	      (reverse operator_list)))
+(define (make-operator-lists equation)
+  (apply cartesian-product (make-list (- (length equation) 1) (list + *))))
 
-(define (can-equation-satisfy-target target equation)
+(define (evaluate-equation equation operator_list)
+  (fold (lambda (e op previous)
+	  (op previous e))
+	(car equation)
+	(cdr equation) 
+	operator_list))
+
+(define (can-equation-satisfy-target target equation op-proc)
   (not (eq? #f (member target
 		       ;; create list of possible evaluations
 		       (map (lambda (operator_list)
 			      (evaluate-equation equation operator_list))
-			    (make-all-operator-lists equation))))))
+			    (op-proc equation))))))
 
 (define (get-target line)
   (string->number (car (string-split line #\:))))
@@ -42,17 +43,24 @@
 (define (get-equation line)
   (map string->number (cdr (string-split (cadr (string-split line #\:)) #\space))))
 
-(define (solve-part-one targets_and_equations)
+(define (solve-part targets_and_equations op-proc)
   (apply + (map (lambda (x)
 		(cond
-		 ((can-equation-satisfy-target (get-target x) (get-equation x)) (get-target x))
+		 ((can-equation-satisfy-target (get-target x) (get-equation x) op-proc) (get-target x))
 		 (else 0))
 		) targets_and_equations)))
+
+;; Part Two ------------------------------------------------------------------------------
+
+(define (make-operator-lists-p2 equation)
+  (apply cartesian-product (make-list (- (length equation) 1) (list + * ||))))
 
 ;; Results -------------------------------------------------------------------------------
 
 (display (string-append
 	  "Part One Result: "
-	  (number->string  (solve-part-one (string-split (get-string-all (open-input-file "input")) #\newline)))))
+	  (number->string  (solve-part (string-split (get-string-all (open-input-file "input")) #\newline) make-operator-lists))
+	  "\nPart Two Result: "
+	  (number->string  (solve-part (string-split (get-string-all (open-input-file "input")) #\newline) make-operator-lists-p2))))
 
 
