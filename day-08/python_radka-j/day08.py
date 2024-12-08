@@ -27,10 +27,14 @@ for antenna, positions in antenna_positions.items():
         an_plus = (pos2[0] + direction[0], pos2[1] + direction[1])
         an_min = (pos1[0] - direction[0], pos1[1] - direction[1])
 
+        # PART 1
+
         if in_bounds(an_plus):
             antinodes_part1.append(an_plus)
         if in_bounds(an_min):
             antinodes_part1.append(an_min)
+
+        # PART 2
 
         antinodes_part2.append(pos1)
         antinodes_part2.append(pos2)
