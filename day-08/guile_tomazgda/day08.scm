@@ -1,5 +1,3 @@
-;; should I be an antinode?
-
 (use-modules (srfi srfi-1)
 	     (srfi srfi-9)
 	     (ice-9 textual-ports))
@@ -41,7 +39,7 @@
 					     (and
 					      (equal? (antenna-frequency x) (antenna-frequency antenna1))
 					      (not (equal? (antenna-location x) (antenna-location antenna1)))))
-				 antennas))
+					   antennas))
 			  ) antennas))))
 
 (define (find-antennas-in-row map_row row_index)
