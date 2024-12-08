@@ -7,15 +7,15 @@ with open("input.txt") as f:
 # can the the vals equal the tot with the right combination of operators?
 def can_be_true(vals, tot, operators):
     for comb in itertools.product(operators, repeat=len(vals) - 1):
-        val = vals[0]
+        res = vals[0]
         for i, n in enumerate(vals[1:]):
             if comb[i] == "+":
-                val += n
+                res += n
             elif comb[i] == "*":
-                val *= n
+                res *= n
             elif comb[i] == "||":
-                val = int(str(val) + str(n))
-        if val == int(tot):
+                res = int(str(res) + str(n))
+        if res == tot:
             return True
     return False
 
@@ -23,15 +23,15 @@ def can_be_true(vals, tot, operators):
 part1_vals = []
 part2_vals = []
 for line in lines:
-    tot, nums = line.split(": ")
-    str_vals = nums.split(" ")
-    int_vals = [int(n) for n in str_vals]
+    tot_str, vals_str = line.split(": ")
+    tot_int = int(tot_str)
+    vals_int = [int(n) for n in vals_str.split(" ")]
 
-    if can_be_true(int_vals, int(tot), operators=["+", "*"]):
-        part1_vals.append(int(tot))
+    if can_be_true(vals_int, tot_int, operators=["+", "*"]):
+        part1_vals.append(tot_int)
     else:
-        if can_be_true(int_vals, int(tot), operators=["+", "*", "||"]):
-            part2_vals.append(int(tot))
+        if can_be_true(vals_int, tot_int, operators=["+", "*", "||"]):
+            part2_vals.append(tot_int)
 
 print("part 1: ", sum(part1_vals))
 print("part 2: ", sum(part1_vals) + sum(part2_vals))
