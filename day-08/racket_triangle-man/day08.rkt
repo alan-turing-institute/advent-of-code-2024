@@ -54,7 +54,7 @@
           (append-map antinodes-of/1
                       (sequence->list (in-combinations as 2)))))
 
-;; Both antinode of antennae a1 and a2 (for Part 1)
+;; Both antinodes of antennae a1 and a2 (for Part 1)
 (define (antinodes-of/1 aa)
   (match-let ([(cons _ (cons r1 c1)) (car aa)]
               [(cons _ (cons r2 c2)) (cadr aa)])
@@ -66,7 +66,7 @@
   (append-map (curry antinodes-of/2 nrows ncols)
               (sequence->list (in-combinations as 2))))
 
-;; Both antinode of antennae a1 and a2 (for Part 1)
+;; All antinodes of antennae a1 and a2 (for Part 2)
 (define (antinodes-of/2 nrows ncols aa)
   (match-let ([(cons _ (cons r1 c1)) (car aa)]
               [(cons _ (cons r2 c2)) (cadr aa)])
