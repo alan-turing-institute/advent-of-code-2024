@@ -8,7 +8,6 @@ with open("input.txt") as file:
 city_map = np.array(list(map(list, input.splitlines())))
 
 EMPTY = "."
-ANTINODE = "#"
 
 
 # PART ONE
