@@ -32,7 +32,7 @@ def parse_file(file_path):
 
 
 def part_one(disk):
-    # part one
+    free_space = disk.count(-1)
     for idx in range(len(disk)-1, -1, -1):
         first_free_space = disk.index(-1)
         if first_free_space == len(disk) - free_space:
@@ -77,14 +77,7 @@ def find_file_block(id, disk):
             return start, idx-start
         
 
-if __name__ == "__main__":
-    file_path = Path("input.txt")
-    disk = parse_file(file_path)    
-    free_space = disk.count(-1)
-
-    disk_one = part_one(disk.copy())
-    part_one = checksum(disk_one)
-    
+def part_two(disk):
     for file_id in range(max(disk), 1, -1):
         file_idx, file_len = find_file_block(file_id, disk)
         for left_idx, space_len in find_free_space(disk):
@@ -94,8 +87,18 @@ if __name__ == "__main__":
                     disk[left_idx+i] = disk[file_idx+i]
                     disk[file_idx+i] = -1
                 break
+    return disk
 
-    part_two = checksum(disk)
+
+if __name__ == "__main__":
+    file_path = Path("input.txt")
+    disk = parse_file(file_path)    
+
+    disk_one = part_one(disk.copy())
+    part_one_answer = checksum(disk_one)
     
-    print("Part 1 solution:", part_one)
-    print("Part 2 solution:", part_two)
+    disk_two = part_two(disk)
+    part_two_answer = checksum(disk_two)
+    
+    print("Part 1 solution:", part_one_answer)
+    print("Part 2 solution:", part_two_answer)
