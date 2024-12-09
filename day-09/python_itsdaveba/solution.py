@@ -36,25 +36,24 @@ print("Part One:", checksum)
 # PART TWO
 
 # now we need to check `disk_map` because we are moving complete files
-starting_block = np.cumsum(disk_map)
-file_blocks = [(int(index), num_blocks)for index, num_blocks in zip(starting_block[1::2], disk_map[2::2])]  # index, num_blocks
-free_blocks = [(int(index), num_blocks) for index, num_blocks in zip(starting_block[0::2], disk_map[1::2])]  # index, num_blocks
 new_layout = np.array(layout)
+starting_block = np.cumsum(disk_map)
+file_blocks = [(int(index), num_blocks) for index, num_blocks in zip(starting_block[1::2], disk_map[2::2])]  # index, num_blocks
+free_blocks = [(int(index), num_blocks) for index, num_blocks in zip(starting_block[0::2], disk_map[1::2])]  # index, num_blocks
 while file_blocks:
     file_index, file_size = file_blocks.pop()
-    for i, (index, num_blocks) in enumerate(free_blocks):
-        if index >= file_index:
+    for i, (free_index, free_size) in enumerate(free_blocks):
+        if free_index >= file_index:
             break
-        if num_blocks >= file_size:
-            new_layout[index: index + file_size] = new_layout[file_index: file_index + file_size]
+        if free_size >= file_size:
+            new_layout[free_index: free_index + file_size] = new_layout[file_index: file_index + file_size]
             new_layout[file_index: file_index + file_size] = FREE_SPACE
-            free_blocks[i] = (index + file_size, num_blocks - file_size)
+            free_blocks[i] = (free_index + file_size, free_size - file_size)
             break
 
 checksum = 0
 for i, id_number in enumerate(new_layout):
-    if id_number == FREE_SPACE:
-        continue
-    checksum += i * id_number
+    if id_number != FREE_SPACE:
+        checksum += i * id_number
 
 print("Part Two:", checksum)
