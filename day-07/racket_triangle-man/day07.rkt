@@ -15,13 +15,14 @@
   (apply + (map car *soluble-eqns/1*))
 
   ;; Part 2
-  
-  (define *soluble-eqns/2*
-    (filter
-     (λ (eqn) (soluble? (car eqn) (cdr eqn) (list + * ||)))
-     *eqns*))
 
-  (apply + (map car *soluble-eqns/2*))
+  (time
+   (define *soluble-eqns/2*
+     (filter
+      (λ (eqn) (soluble? (car eqn) (cdr eqn) (list + * ||)))
+      *eqns*))
+
+   (apply + (map car *soluble-eqns/2*)))
   
   )
 
