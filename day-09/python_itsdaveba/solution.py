@@ -6,6 +6,7 @@ with open("input.txt") as file:
 disk_map = list(map(int, input))
 FREE_SPACE = -1
 
+
 # PART ONE
 
 layout = []
@@ -46,7 +47,7 @@ while file_blocks:
         if free_index >= file_index:
             break
         if free_size >= file_size:
-            new_layout[free_index: free_index + file_size] = new_layout[file_index: file_index + file_size]
+            new_layout[free_index: free_index + file_size] = new_layout[file_index]
             new_layout[file_index: file_index + file_size] = FREE_SPACE
             free_blocks[i] = (free_index + file_size, free_size - file_size)
             break
