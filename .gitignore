@@ -3,6 +3,7 @@
 
 # AOC inputs should not be shared online
 *.txt
+input
 
 # vscode
 .vscode
