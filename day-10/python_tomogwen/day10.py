@@ -23,9 +23,8 @@ def find_trailheads(map):
 
 
 def find_routes(location, goal_height, nine_reached, nine_count):
-    # score is the number of nine_height positions reachable
     for direction in [[+1, 0], [-1, 0], [0, +1], [0, -1]]:
-        new_location = [location[0] + direction[0], location[1] + direction[1]]
+        new_location = [location[0]+direction[0], location[1]+direction[1]]
         # check valid coordinate
         if 0 <= new_location[0] < len(map) and 0 <= new_location[1] < len(map[0]):
             # check if we've reached correct height
