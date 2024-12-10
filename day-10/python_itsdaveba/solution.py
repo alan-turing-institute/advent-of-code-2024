@@ -17,7 +17,7 @@ def trail_ends(location, height):
     ends = []
     next_locations = location + directions
 
-    # check out-out-bounds
+    # check out-of-bounds
     in_bounds = np.all((next_locations >= 0) & (next_locations < topographic_map.shape), axis=1)
 
     next_locations = next_locations[in_bounds]
