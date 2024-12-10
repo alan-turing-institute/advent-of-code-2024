@@ -1,6 +1,6 @@
 import numpy as np
 
-with open("test.txt") as file:
+with open("input.txt") as file:
     input = file.read()
 
 topographic_map = np.array(list(map(list, input.splitlines())), dtype=int)
