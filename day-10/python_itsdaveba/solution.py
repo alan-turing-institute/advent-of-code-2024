@@ -5,6 +5,7 @@ with open("test.txt") as file:
 
 topographic_map = np.array(list(map(list, input.splitlines())), dtype=int)
 directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]  # up, down, left, right
+
 START_HEIGHT = 0
 END_HEIGHT = 9
 
