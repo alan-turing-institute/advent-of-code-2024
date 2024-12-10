@@ -18,32 +18,36 @@ def in_bounds(pos):
     return True
 
 
-antinodes1 = []
-antinodes2 = []
+antinodes_part1 = []
+antinodes_part2 = []
 
 for antenna, positions in antenna_positions.items():
     for pos1, pos2 in itertools.combinations(positions, 2):
         direction = (pos2[0] - pos1[0], pos2[1] - pos1[1])
-        antinode1 = (pos2[0] + direction[0], pos2[1] + direction[1])
-        antinode2 = (pos1[0] - direction[0], pos1[1] - direction[1])
+        an_plus = (pos2[0] + direction[0], pos2[1] + direction[1])
+        an_min = (pos1[0] - direction[0], pos1[1] - direction[1])
 
-        if in_bounds(antinode1):
-            antinodes1.append(antinode1)
-        if in_bounds(antinode2):
-            antinodes1.append(antinode2)
+        # PART 1
 
-        antinodes2.append(pos1)
-        antinodes2.append(pos2)
+        if in_bounds(an_plus):
+            antinodes_part1.append(an_plus)
+        if in_bounds(an_min):
+            antinodes_part1.append(an_min)
 
-        while in_bounds(antinode1):
-            antinodes2.append(antinode1)
-            antinode1 = (antinode1[0] + direction[0], antinode1[1] + direction[1])
+        # PART 2
 
-        while in_bounds(antinode2):
-            antinodes2.append(antinode2)
-            antinode2 = (antinode2[0] - direction[0], antinode2[1] - direction[1])
+        antinodes_part2.append(pos1)
+        antinodes_part2.append(pos2)
+
+        while in_bounds(an_plus):
+            antinodes_part2.append(an_plus)
+            an_plus = (an_plus[0] + direction[0], an_plus[1] + direction[1])
+
+        while in_bounds(an_min):
+            antinodes_part2.append(an_min)
+            an_min = (an_min[0] - direction[0], an_min[1] - direction[1])
 
 
-print("part 1: ", len(set(antinodes1)))
+print("part 1: ", len(set(antinodes_part1)))
 
-print("part 2: ", len(set(antinodes2)))
+print("part 2: ", len(set(antinodes_part2)))
