@@ -1,6 +1,5 @@
 import os
 import numpy as np
-import queue
 
 
 def parse_file(file_path):
@@ -61,20 +60,16 @@ if __name__ == "__main__":
     total_unique_trailheads = []
 
     for initial_pos in positions:
-        q = queue.Queue()
+        stack = []  # Use a stack for DFS
         path = ""
-        q.put(path)
+        stack.append(path)
 
         unique_positions = []
         all_positions = []
-        while True:
-            # no more directions to check
-            if q.empty():
-                break
-            path = q.get()
-            print (path)
+        while stack:
+            path = stack.pop()  # Get the last path from the stack
 
-            # check if we have found the exit
+            # Check if we have found the exit
             pos, found = find_end_trail(data, initial_pos, path)
 
             if found:
@@ -82,13 +77,13 @@ if __name__ == "__main__":
                     unique_positions.append(pos)
                 all_positions.append(pos)
 
-            # add directions to the path and check if they are validß
+            # Add new paths to the stack
             for next_step in ["L", "R", "U", "D"]:
                 updated_path = path + next_step
 
-                # check if the new path is valid
+                # Check if the new path is valid
                 if valid_move(data, initial_pos, updated_path):
-                    q.put(updated_path)
+                    stack.append(updated_path)
 
         total_trailheads.append(all_positions)
         total_unique_trailheads.append(unique_positions)
