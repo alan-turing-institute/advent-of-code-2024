@@ -5,7 +5,7 @@ with open("input.txt") as f:
 grid = np.array([[int(n) for n in line] for line in lines])
 
 start_indices = np.where(grid == 0)
-start_pos = [(i, j) for i, j in zip(start_indices[0], start_indices[1])]
+start_positions = [(i, j) for i, j in zip(start_indices[0], start_indices[1])]
 
 
 def valid_moves(pos):
@@ -52,7 +52,7 @@ def dfs(start_pos):
 
 tot1 = 0
 tot2 = 0
-for pos in start_pos:
+for pos in start_positions:
     paths = dfs(pos)
     # unique destinations reached
     tot1 += len(set(paths))
