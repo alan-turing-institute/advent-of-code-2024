@@ -40,7 +40,7 @@ After the first couple of days I realised I needed to tell it where to get the i
 | 6  | ✅ | 1 | ✅ | 1 | Part 2 solution was slow (38s). |
 | 7  | ✅ | 2 | ✅ | 2 | The first time the part 1 script was incorrect initially (other than issues with me specifying the input file on the first couple of days), but it was able to fix it after prompting it that it returned 0 for the example. The part 1 implementation took 34s to run. The first part 2 implementation was too slow, but asking it to make it more efficient worked - it added recursion and checking whether intermediate results had become too big. However, it mentioned memoization could make it more efficient but didn't add it to the script. |
 | 8  | ✅ | 2 | ✅ | 4 | Part 1 incorrect initially, had not interpreted the antennas along a line logic correctly and had added some unused and unneeded variables too. I read the problem and the generated script to figure out how to prompt it to correct it with the 2nd prompt. Part 2 took me 4 prompts to correct the logic for finding antinode locations. The last prompt gave me two outputs to give a preference between - one gives the correct answer and the other is wrong. The one that gives the correct answer has a block of unused code using `gcd` which was used in previous incorrect answers. Our Slack channel had messages about the part 2 wording being difficult to understand. |
-| 9  |  |  |  |  |  |
+| 9  | ❌ | 13 |  |  | Attempt 1: Gave up on part 1 after 13 prompts. I think I'm not helping by being tired and not understanding the problem fully myself. Will try again in a fresh chat. |
 | 10  |  |  |  |  |  |
 | 11   |  |  |  |  |  |
 | 12  |  |  |  |  |  |
@@ -74,3 +74,5 @@ After the first couple of days I realised I needed to tell it where to get the i
   - Can I solve the problems without writing code? **Yes**.
   - Can I solve the problems without understanding them or candidate code solutions? **No** (at least not always).
 - A couple of the ones that needed more prompting involved some more complex 'spatial'-type logic, e.g. variations of things along diagonals.
+- There might be a better way to prompt it to make edits, but prompts for small changes require generating the whole script (and any prose around it) again, which is pretty slow.
+- On Day 9 it started giving me Chat GPT-4o with Canvas, which gives an editor like environment with a Python runtime and some other features. I'm going to mostly stick to conventional chat style prompting. It generates less text to explain the script in this mode.
