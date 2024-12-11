@@ -25,7 +25,7 @@ def get_spaces(disk_map):
   return list(zip( spaces[:,0], np.diff(spaces, axis=1).flat ))
 
 #%%
-fname = 'test.txt'
+fname = 'input.txt'
 
 with open(fname, 'r') as f:
     diskmap = f.readline().strip()
@@ -59,9 +59,6 @@ print("Part 1: ", checksum)
 
 files = {id:{'idx':idx, 'size':size} for id, (idx, size) in enumerate(filepntrs)}
 
-files
-
-
 # Try and move each file exactly once
 for fid in range(max(full_disk_original), -1, -1):
     # Get the size of this file block
@@ -86,12 +83,6 @@ for fid in range(max(full_disk_original), -1, -1):
             # only move for the first matching space!
             break
 
-space[0] < files[fid]['idx']
-space
-spacepntrs
-files
+checksum = sum( sum(fid*loc for loc in range(f['idx'], f['idx']+f['size'])) for fid, f in files.items() )
 
-#
-#
-# if __name__ == '__main__':
-#   main()
+print("Part 2: ", checksum)
