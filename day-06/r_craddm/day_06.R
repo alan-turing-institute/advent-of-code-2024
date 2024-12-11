@@ -1,4 +1,5 @@
 library(stringr)
+library(purrr)
 
 test_data <- function() {
   matrix(
