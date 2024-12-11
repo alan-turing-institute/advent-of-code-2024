@@ -1,5 +1,8 @@
 use std::env;
 use std::fs;
+use std::collections::BTreeMap;
+
+type Counter = BTreeMap<i64, i64>;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -9,8 +12,7 @@ fn main() {
     let contents = fs::read_to_string(file_path)
         .expect("Should have been able to read the file");
 
-    // split into vec of nums based on spaces
-    let mut stones: Vec<i64> = contents
+    let stones: Vec<i64> = contents
         .split_whitespace()
         .map(|s| s.parse().expect("parse error"))
         .collect();
@@ -18,44 +20,71 @@ fn main() {
     println!("Input stones:");
     println!("{:?}", stones);
 
-    println!("Part one: {}", part_one(&mut stones));
+    println!("Part one: {}", solve(&stones, 25));
+    println!("Part two: {}", solve(&stones, 75));
 }
 
+fn count(stones: &[i64]) -> Counter {
+    let mut counter = Counter::new();
+    for &stone in stones {
+        *counter.entry(stone).or_insert(0) += 1;
+    }
+    counter
+}
 
-fn blink(stones: &mut Vec<i64>) -> Vec<i64> {
-    // for each stone:
-        // If the stone is engraved with the number 0, it is replaced by a stone engraved with the number 1.
-        // If the stone is engraved with a number that has an even number of digits, it is replaced by two stones. The left half of the digits are engraved on the new left stone, and the right half of the digits are engraved on the new right stone. (The new numbers don't keep extra leading zeroes: 1000 would become stones 10 and 0.)
-        // If none of the other rules apply, the stone is replaced by a new stone; the old stone's number multiplied by 2024 is engraved on the new stone.
+fn count_digits(mut n: i64) -> u32 {
+    let mut count = 0;
+    while n > 0 {
+        n /= 10;
+        count += 1;
+    }
+    count
+}
 
-    let mut new_stones = Vec::new();
-    for i in 0..stones.len() {
-        let stone = stones[i];
-        if stone == 0 {
-            new_stones.push(1);
-        } else if stone.to_string().len() % 2 == 0 {
-            let stone_str = stone.to_string();
-            let half = stone_str.len() / 2;
-            let left = stone_str[..half].parse().expect("parse error");
-            let right = stone_str[half..].parse().expect("parse error");
-            new_stones.push(left);
-            new_stones.push(right);
+fn split_number(n: i64, digits: u32) -> (i64, i64) {
+    let half_digits = digits / 2;
+    let divisor = 10_i64.pow(half_digits);
+    let right = n % divisor;
+    let left = n / divisor;
+    (left, right)
+}
+
+// Returns Vec of (new_stone, count) pairs
+fn blink_single(stone: i64) -> Vec<(i64, i64)> {
+    if stone == 0 {
+        vec![(1, 1)]
+    } else {
+        let digit_count = count_digits(stone);
+        if digit_count % 2 == 0 {
+            let (left, right) = split_number(stone, digit_count);
+            vec![(left, 1), (right, 1)]
         } else {
-            new_stones.push(stone * 2024);
+            vec![(stone * 2024, 1)]
         }
     }
-
-    new_stones
 }
 
-fn part_one(stones: &mut Vec<i64>) -> usize {
+fn blink_with_count(pair: (i64, i64)) -> Vec<(i64, i64)> {
+    let (stone, count) = pair;
+    blink_single(stone).into_iter()
+        .map(|(new_stone, multiplier)| (new_stone, multiplier * count))
+        .collect()
+}
 
-    let num_blinks: i8 = 75;
-
-    for _ in 0..num_blinks {
-        *stones = blink(stones);
-        // println!("{:?}", stones);
+fn iterate_blink(counter: Counter) -> Counter {
+    let mut new_counter = Counter::new();
+    for (stone, count) in counter {
+        for (new_stone, new_count) in blink_with_count((stone, count)) {
+            *new_counter.entry(new_stone).or_insert(0) += new_count;
+        }
     }
+    new_counter
+}
 
-    stones.len()
+fn solve(stones: &[i64], n: usize) -> i64 {
+    let mut current = count(stones);
+    for _ in 0..n {
+        current = iterate_blink(current);
+    }
+    current.values().sum()
 }
