@@ -5,49 +5,10 @@ with open("input.txt") as f:
 grid = [list(line) for line in lines]
 
 
-def valid_moves(pos):
-    """
-    Move is valid if it is on the grid and has the same plant as `pos`.
-    """
-    valid = []
-    invalid = []
-    i, j = pos
-    plant = grid[i][j]
-
-    # up
-    if i > 0:
-        if grid[i - 1][j] == plant:
-            valid.append((i - 1, j, "up"))
-        else:
-            invalid.append((i - 1, j, "up"))
-    else:
-        invalid.append((i - 1, j, "up"))
-    # down
-    if i < len(grid) - 1:
-        if grid[i + 1][j] == plant:
-            valid.append((i + 1, j, "down"))
-        else:
-            invalid.append((i + 1, j, "down"))
-    else:
-        invalid.append((i + 1, j, "down"))
-    # right
-    if j < len(grid[0]) - 1:
-        if grid[i][j + 1] == plant:
-            valid.append((i, j + 1, "right"))
-        else:
-            invalid.append((i, j + 1, "right"))
-    else:
-        invalid.append((i, j + 1, "right"))
-    # left
-    if j > 0:
-        if grid[i][j - 1] == plant:
-            valid.append((i, j - 1, "left"))
-        else:
-            invalid.append((i, j - 1, "left"))
-    else:
-        invalid.append((i, j - 1, "left"))
-
-    return valid, invalid
+def in_bounds(pos):
+    if pos[0] < 0 or pos[1] < 0 or pos[0] >= len(grid) or pos[1] >= len(grid[0]):
+        return False
+    return True
 
 
 def explore_plot(start_pos):
@@ -65,10 +26,25 @@ def explore_plot(start_pos):
         if curr_pos not in visited:
             area += 1
             visited.append(curr_pos)
-            # "borders" are positions just outside the plot
-            moves, borders = valid_moves(curr_pos)
-            perimeter.extend(borders)
-            for i, j, _ in moves:
+            i, j = curr_pos
+            adjacents = [
+                (i + 1, j, "down"),
+                (i - 1, j, "up"),
+                (i, j + 1, "right"),
+                (i, j - 1, "left"),
+            ]
+            valid_moves = []
+            invalid_moves = []
+            for adj_pos in adjacents:
+                if (
+                    in_bounds(adj_pos)
+                    and grid[adj_pos[0]][adj_pos[1]] == grid[curr_pos[0]][curr_pos[1]]
+                ):
+                    valid_moves.append(adj_pos)
+                else:
+                    invalid_moves.append(adj_pos)
+            perimeter.extend(invalid_moves)
+            for i, j, _ in valid_moves:
                 pos = (i, j)
                 stack.append(pos)
     return area, perimeter
@@ -81,10 +57,11 @@ def count_sides(perimeter):
     """
     sides = 0
 
-    # if left plot by moving left/right--> get unique column indexes (idx=1) that reached
-    # from this direction and look for continuous row values (idx=0) in each column
-    # if left plot by moving top/down --> get unique row indexes (idx=0) that reached
-    # from this direction and look for continuos column values (idx=1) in each row
+    # if left plot by moving left/right --> for each position (i,j) reached outside the
+    # plot area, get unique column indexes (j) of the positions reached from this
+    # direction and count continuous row values (i)
+    # if left plot by moving top/down --> get unique row indexes (i) that reached from
+    # this direction and count continuous column values (j)
     for direction, border_idx, search_idx in [
         ("right", 1, 0),
         ("left", 1, 0),
