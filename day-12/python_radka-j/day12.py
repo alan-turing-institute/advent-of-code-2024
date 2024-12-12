@@ -98,10 +98,10 @@ def count_sides(perimeter):
 
         # each index is row/wcolumn --> check for continuous column/row values
         for idx in indexes:
-            rows = [pos[search_idx] for pos in to_explore if pos[border_idx] == idx]
+            vals = [pos[search_idx] for pos in to_explore if pos[border_idx] == idx]
             # sort and get diff between adjacent values
-            rows = np.array(sorted(rows))
-            diffs = rows[1:] - rows[:-1]
+            vals = np.array(sorted(vals))
+            diffs = vals[1:] - vals[:-1]
             # count discontinuities (+ 1)
             sides += sum(diffs != 1) + 1
 
