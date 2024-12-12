@@ -5,9 +5,8 @@ pub fn print_coloured_map(map: &[Vec<char>], regions: &[Region]) {
     println!("\nColoured map:");
 
     let colours = [
+        // only need 4 colours, famously!
         "\x1b[31m", "\x1b[32m", "\x1b[34m", "\x1b[33m",
-        "\x1b[35m", "\x1b[36m", "\x1b[91m", "\x1b[92m",
-        "\x1b[94m", "\x1b[93m", "\x1b[95m", "\x1b[96m",
     ];
     let reset = "\x1b[0m";
 
