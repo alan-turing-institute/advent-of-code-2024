@@ -76,43 +76,35 @@ def explore_plot(start_pos):
 
 def count_sides(perimeter):
     """
-    Given a list of perimeter positions (i.e. locations just outside the plot are),
+    Given a list of perimeter positions (i.e. locations just outside the plot area),
     count the number of sides that the plot has.
     """
     sides = 0
 
-    # side walls --> got there by horizontal step
-    # check for continuities moving up/down
-    for direction in ["right", "left"]:
+    # if left plot by moving left/right--> get unique column indexes (idx=1) that reached
+    # from this direction and look for continuous row values (idx=0) in each column
+    # if left plot by moving top/down --> get unique row indexes (idx=0) that reached
+    # from this direction and look for continuos column values (idx=1) in each row
+    for direction, border_idx, search_idx in [
+        ("right", 1, 0),
+        ("left", 1, 0),
+        ("up", 0, 1),
+        ("down", 0, 1),
+    ]:
 
-        verticals = [pos for pos in perimeter if pos[2] == direction]
-        # get the unique column indexes
-        j_idx = list(set([pos[1] for pos in verticals]))
+        to_explore = [pos for pos in perimeter if pos[2] == direction]
+        # get the unique row/column indexes
+        indexes = list(set([pos[border_idx] for pos in to_explore]))
 
-        # each index is a column --> check continuous row values in each given column
-        for idx in j_idx:
-            rows = [pos[0] for pos in verticals if pos[1] == idx]
+        # each index is row/wcolumn --> check for continuous column/row values
+        for idx in indexes:
+            rows = [pos[search_idx] for pos in to_explore if pos[border_idx] == idx]
             # sort and get diff between adjacent values
             rows = np.array(sorted(rows))
             diffs = rows[1:] - rows[:-1]
             # count discontinuities (+ 1)
             sides += sum(diffs != 1) + 1
 
-    # top/bottom walls --> got there by a vertical step
-    # check for continutities moving left/right
-    for direction in ["up", "down"]:
-        horizontals = [pos for pos in perimeter if pos[2] == direction]
-        # get the unique row indexes
-        i_idx = list(set([pos[0] for pos in horizontals]))
-
-        # each index is a row --> check continuous column values in each given row
-        for idx in i_idx:
-            cols = [pos[1] for pos in horizontals if pos[0] == idx]
-            # sort and get diff between adjacent values
-            cols = np.array(sorted(cols))
-            diffs = cols[1:] - cols[:-1]
-            # count discontinuities (+ 1)
-            sides += sum(diffs != 1) + 1
     return sides
 
 
