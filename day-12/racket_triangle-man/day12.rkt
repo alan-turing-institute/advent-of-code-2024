@@ -21,21 +21,36 @@ END
 (define *garden*
   (lists->grid
    (map string->list
-        (call-with-input-file "input.txt" port->lines))))
+        (call-with-input-file "input.txt" port->lines)
+        ;; (call-with-input-string *eg* port->lines)
+        )))
 
 ;; Part 1
 
 (define *canvas* (grid-map (const #f) *garden*))
 
-(for*/sum ([r (range (grid-nrows *garden*))]
-           [c (range (grid-ncols *garden*))])
-  (let ([pos (cons r c)])
-    (if (not (grid-ref *canvas* pos))
-        (let-values ([(lbl area perimeter) (flood-into! *canvas* *garden* pos)])
-          (* area perimeter))
-        0)))
+(define *regions*
+  (for*/list ([r (range (grid-nrows *garden*))]
+              [c (range (grid-ncols *garden*))]
+              #:unless (grid-ref *canvas* (cons r c)))
+    (let ([pos (cons r c)])
+      (let-values ([(lbl area perimeter) (flood-into! *canvas* *garden* pos)])
+        (list pos area perimeter)))))
 
-  
+(apply + (map (λ (r) (* (cadr r) (caddr r))) *regions*))
+
+;; Part 2
+
+(define *xss* (grid->lists *canvas*))
+
+(for/sum ([region (in-list (map car *regions*))]
+          [area   (in-list (map cadr *regions*))])
+  (* area
+     (+ (count-horizontals *xss* region)
+        (count-horizontals (transpose *xss*) region))))
+
+
+
   )
 
 ;; ------------------------------------------------------------------------------------------
@@ -90,3 +105,34 @@ END
                          (+ perimeter (- 4 (length reg)))))))))
 
   (values (grid-ref g start-pos) area perimeter))
+
+
+;; Utility (tranpose = zip)
+(define (transpose xss)
+  (apply map list xss))
+
+;; Count the number of "runs" of #t in xs
+(define (count-runs xs)
+  (let loop ([in-run? #f]
+             [nruns   0]
+             [xs      xs])
+    (if (null? xs)
+        nruns
+        (if (car xs)
+            (if (not in-run?)
+                (loop #t (+ nruns 1) (cdr xs))
+                (loop #t nruns (cdr xs)))
+            (loop #f nruns (cdr xs))))))
+
+;; Is x lbl by y isn't?
+(define ((differ? lbl) x y)
+  (and (equal? x lbl)
+       (not (equal? y lbl))))
+
+;; Count up all the horizontal lines in a list of lists labelled by lbl
+(define (count-horizontals xss lbl)
+  (let ([dummy-row (build-list (length (car xss)) (const #f))])
+    (for/sum ([row1 (in-list (cons dummy-row xss))]
+              [row2 (in-list (append xss (list dummy-row)))])
+      (+ (count-runs (map (differ? lbl) row1 row2))
+         (count-runs (map (differ? lbl) row2 row1))))))

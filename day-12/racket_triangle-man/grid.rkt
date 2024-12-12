@@ -19,6 +19,7 @@
          grid-nrows
          grid-pos-inside?
          grid-adjacents
+         grid-row
          grid->lists
          lists->grid
          grid-member
@@ -85,6 +86,14 @@
    (λ (p) (grid-pos-inside? g (pos+ pos p)))
    ;; n e s w  
    '((-1 . 0) (0 . 1) (1 . 0) (0 . -1))))
+
+;; Return row r from the grid
+(define (grid-row g row)
+  (let ([vec (grid-vec g)]
+        [ncs (grid-ncols g)])
+    (vector-take
+     (vector-drop vec (* row ncs))
+     ncs)))
 
 ;; Return the first position of v in g, in a search that is
 ;; "Western reading direction"
