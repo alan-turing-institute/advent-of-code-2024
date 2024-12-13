@@ -11,6 +11,7 @@ let equations = In_channel.with_open_bin "input.txt" In_channel.input_all
 let det a b c d =
   a *. d -. c *. b
 
+(*Cramer's rule*)
 let solve eq offset =
   match eq with
   | a :: b :: out :: []  ->
