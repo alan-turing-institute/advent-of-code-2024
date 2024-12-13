@@ -36,7 +36,7 @@ for i in range(len(indices)):
 
     # PART 1
     a, b = solve_system(machine["A"], machine["B"], machine["X"])
-    if (a).is_integer() and (b).is_integer():
+    if (a).is_integer() and (b).is_integer() and a <= 100 and b <= 100:
         tot1 += 3 * a + b
 
     # PART 2
