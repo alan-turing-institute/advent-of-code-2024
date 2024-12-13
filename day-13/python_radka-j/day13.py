@@ -14,7 +14,7 @@ def play_machine(machine, max_button_press):
     a = machine["A"]
     b = machine["B"]
 
-    cheapest = 1000000000
+    cheapest = np.inf
     for i in range(max_button_press):
         for j in range(max_button_press):
             if i * a[0] + j * b[0] == target[0] and i * a[1] + j * b[1] == target[1]:
@@ -41,7 +41,7 @@ for i in range(len(breaks)):
 
     # PART 1
     price = play_machine(machine, 100)
-    if price < 1000000000:
+    if price < np.inf:
         tot1 += price
 
     # PART 2
