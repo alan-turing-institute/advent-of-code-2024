@@ -101,6 +101,7 @@ def compute(region_value, data):
         all_positions = []
         all_positions.append(initial_pos)
 
+        corner = 0
         while stack:
             path = stack.pop()  # Get the last path from the stack
 
@@ -110,14 +111,24 @@ def compute(region_value, data):
                 # Check if the new path is valid
                 if valid_move(data, initial_pos, path + next_step, region_value, all_positions):
                     updated_path = path + next_step
+
+                    if next_step != stack[-1]:
+                        corner += 1
+
                     stack.append(updated_path)
                     pos0, pos1 = move_through_trail(initial_pos, updated_path)
                     all_positions.append([pos0, pos1])
                     regions.append([pos0, pos1])
 
+
+
         area = len(all_positions)
         per =  sum([count_perimeter(data, i[0], i[1]) for i in all_positions])
         s = find_corners(all_positions,data)
+
+        print('updated path', updated_path)
+        print('corner', corner)
+        print('updated path', s)
 
         cost_perimeter += area * per
         cost_sides += area * s
