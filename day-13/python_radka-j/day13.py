@@ -6,7 +6,7 @@ with open("input.txt") as f:
     lines = f.read().splitlines()
 
 # use to parse input into individual machines
-breaks = [-1] + [i for i, x in enumerate(lines) if x == ""]
+indices = [-1] + [i for i, x in enumerate(lines) if x == ""]
 
 
 def play_machine(machine, max_button_press):
@@ -26,40 +26,43 @@ def play_machine(machine, max_button_press):
     return cheapest
 
 
+def solve_system(a, b, target):
+    """
+    From: https://en.wikipedia.org/wiki/Cramer%27s_rule#Applications
+    """
+    a1, a2 = a
+    b1, b2 = b
+    c1, c2 = target
+    x = (c1 * b2 - b1 * c2) / (a1 * b2 - b1 * a2)
+    y = (a1 * c2 - c1 * a2) / (a1 * b2 - b1 * a2)
+    return x, y
+
+
 tot1 = 0
 tot2 = 0
-for i in range(len(breaks)):
-    if i == len(breaks) - 1:
-        descript = lines[breaks[i] + 1 :]
+for i in range(len(indices)):
+    if i == len(indices) - 1:
+        descript = lines[indices[i] + 1 :]
     else:
-        descript = lines[breaks[i] + 1 : breaks[i + 1]]
+        descript = lines[indices[i] + 1 : indices[i + 1]]
     machine = {
         "A": [int(n) for n in re.findall(r"\d+", descript[0])],
         "B": [int(n) for n in re.findall(r"\d+", descript[1])],
         "X": [int(n) for n in re.findall(r"\d+", descript[2])],
     }
 
-    # PART 1
+    # PART 1 - the slow method
     price = play_machine(machine, 100)
     if price < np.inf:
         tot1 += price
 
-    # PART 2
+    # PART 2 - use math
     machine["X"][0] += 10000000000000
     machine["X"][1] += 10000000000000
-    buttons = np.array(
-        [[machine["A"][0], machine["B"][0]], [machine["A"][1], machine["B"][1]]]
-    )
-    target = np.array(machine["X"])
-    a, b = np.linalg.solve(buttons, target)
+    a, b = solve_system(machine["A"], machine["B"], machine["X"])
     if (a).is_integer() and (b).is_integer():
         tot2 += 3 * a + b
-    else:
-        # hmmmm....
-        a_clip = round(a, 4)
-        b_clip = round(b, 4)
-        if (a_clip).is_integer() and (b_clip).is_integer():
-            tot2 += 3 * a_clip + b_clip
+
 
 print(tot1)
 print(tot2)
