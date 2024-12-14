@@ -29,3 +29,5 @@ Cargo.lock
 **/*.rs.bk
 >>>>>>> origin/main
 .Rproj.user
+
+images/
