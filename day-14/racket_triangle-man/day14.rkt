@@ -81,6 +81,8 @@
       (+ (abs (- x2 x1))
          (abs (- y2 y1))))))
 
+;; Visualisation utilities
+
 (define (count->symbol n)
   (cond
     [(zero? n) #\.]
@@ -103,7 +105,7 @@
     (displayln ln)))
 
 
-
+;; ------------------------------------------------------------------------------------------
 
 (module+ test
 
