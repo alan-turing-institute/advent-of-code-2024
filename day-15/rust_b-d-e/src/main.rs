@@ -23,11 +23,11 @@ fn main() {
     // println!("Directions: {:?}", directions);
 
     println!("Part one: {}", part_one(&mut grid, &directions));
-    let (mut grid, directions) = parse_file(&contents);
+    let (grid, directions) = parse_file(&contents);
     println!("Part two: {}", part_two(&grid, &directions));
 }
 
-fn parse_file(contents: &str) -> (Vec<Vec<char>>, Vec<(char)>) {
+fn parse_file(contents: &str) -> (Vec<Vec<char>>, Vec<char>) {
     let mut grid = Vec::new();
     let mut directions = Vec::new();
 
@@ -174,7 +174,7 @@ fn try_to_move_wide(mut grid: Vec<Vec<char>>, robot_pos: (usize, usize), dx: i64
 
     // Sideways movement
     if dy != 0 {
-        let mut i = row;
+        let i = row;
         let mut j = new_col;
         let mut can_move = false;
         while j < grid[0].len() && grid[i][j] != '#' {
@@ -341,7 +341,7 @@ fn part_one(grid: &mut Vec<Vec<char>>, directions: &Vec<char>) -> i64 {
 }
 
 fn part_two(grid: &Vec<Vec<char>>, directions: &Vec<char>) -> i64 {
-    let mut wide_grid = scale_up_map(grid);
+    let wide_grid = scale_up_map(grid);
 
     let mut robot_pos = (0, 0);
     for (i, row) in wide_grid.iter().enumerate() {
