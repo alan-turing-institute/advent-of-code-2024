@@ -1,5 +1,6 @@
 use std::env;
 use std::fs;
+use std::collections::HashSet;
 
 fn main() {
 
@@ -109,9 +110,153 @@ fn try_to_move(mut grid: Vec<Vec<char>>, robot_pos: (usize, usize), dx: i64, dy:
     (grid, robot_pos)
 }
 
+fn get_all_boxes(pos: (usize, usize), di: i64, grid: &Vec<Vec<char>>) -> (HashSet<(usize, usize)>, bool) {
+    let (i, j) = pos;
+    let mut boxes = vec![];
+    let mut stack = vec![(i, j)];
+    let mut can_move = true;
+
+    while let Some((curr_i, curr_j)) = stack.pop() {
+        if curr_i >= grid.len() || curr_j >= grid[0].len() {
+            continue;
+        }
+
+        match grid[curr_i][curr_j] {
+            '[' => {
+                boxes.push((curr_i, curr_j));
+                boxes.push((curr_i, curr_j + 1));
+                // Explore positions above/below the box
+                let next_i = if di < 0 {
+                    curr_i.checked_sub(1)
+                } else {
+                    curr_i.checked_add(1)
+                };
+                if let Some(next_i) = next_i {
+                    stack.push((next_i, curr_j));
+                    stack.push((next_i, curr_j + 1));
+                }
+            }
+            ']' => {
+                boxes.push((curr_i, curr_j));
+                boxes.push((curr_i, curr_j - 1));
+                // Explore positions above/below the box
+                let next_i = if di < 0 {
+                    curr_i.checked_sub(1)
+                } else {
+                    curr_i.checked_add(1)
+                };
+                if let Some(next_i) = next_i {
+                    stack.push((next_i, curr_j));
+                    stack.push((next_i, curr_j - 1));
+                }
+            }
+            '#' => {
+                can_move = false;
+            }
+            _ => {}
+        }
+    }
+
+    (HashSet::from_iter(boxes), can_move)
+}
+
 fn try_to_move_wide(mut grid: Vec<Vec<char>>, robot_pos: (usize, usize), dx: i64, dy: i64) -> (Vec<Vec<char>>, (usize, usize)) {
+    let (row, col) = robot_pos;
+    let new_row = (row as i64 + dx) as usize;
+    let new_col = (col as i64 + dy) as usize;
+
+    // If moving into empty space
+    if new_row < grid.len() && new_col < grid[0].len() && grid[new_row][new_col] == '.' {
+        grid[row][col] = '.';
+        grid[new_row][new_col] = '@';
+        return (grid, (new_row, new_col));
+    }
+
+    // Sideways movement
+    if dy != 0 {
+        let mut i = row;
+        let mut j = new_col;
+        let mut can_move = false;
+        while j < grid[0].len() && grid[i][j] != '#' {
+            if grid[i][j] == '.' {
+                can_move = true;
+                break;
+            }
+            j = (j as i64 + dy) as usize;
+        }
+
+        if can_move {
+            // Move boxes
+            let mut j = new_col;
+            while j < grid[0].len() && (grid[row][j] == '[' || grid[row][j] == ']') {
+                j = (j as i64 + dy) as usize;
+            }
+
+            if dy > 0 {  // Moving right
+                let start_pos = col + 2;
+                let end_pos = j + 1;
+                let mut symb = '[';
+                for k in start_pos..end_pos {
+                    grid[row][k] = symb;
+                    symb = if symb == '[' { ']' } else { '[' };
+                }
+            } else {  // Moving left
+                let start_pos = j;
+                let end_pos = col;
+                let mut symb = '[';
+                for k in start_pos..end_pos {
+                    grid[row][k] = symb;
+                    symb = if symb == '[' { ']' } else { '[' };
+                }
+            }
+
+            // Move robot
+            grid[row][col] = '.';
+            grid[new_row][new_col] = '@';
+            return (grid, (new_row, new_col));
+        }
+    }
+
+    // Vertical movement
+    if dx != 0 {
+        let (boxes, can_move) = get_all_boxes((new_row, new_col), dx, &grid);
+
+        if can_move && !boxes.is_empty() {
+            let mut boxes_vec: Vec<_> = boxes.into_iter().collect();
+            // Sort boxes based on movement direction - crucial for preserving box structure
+            if dx < 0 {  // Moving up
+                boxes_vec.sort();
+            } else {  // Moving down
+                boxes_vec.sort_by(|a, b| b.cmp(a));
+            }
+
+            // Move boxes - preserve their character ([/])
+            for (i, j) in &boxes_vec {
+                let char_to_move = grid[*i][*j];  // Store the actual character
+                grid[*i][*j] = '.';  // Clear old position
+
+                let new_i = if dx < 0 {
+                    i.checked_sub(1)
+                } else {
+                    i.checked_add(1)
+                };
+
+                if let Some(new_i) = new_i {
+                    grid[new_i][*j] = char_to_move;  // Move the same character to new position
+                }
+            }
+
+            // Move robot
+            grid[row][col] = '.';
+            grid[new_row][new_col] = '@';
+            return (grid, (new_row, new_col));
+        }
+    }
+
     (grid, robot_pos)
 }
+
+
 
 fn scale_up_map(grid: &Vec<Vec<char>>) -> Vec<Vec<char>> {
     let mut wide_grid = Vec::new();
@@ -148,8 +293,8 @@ fn scale_up_map(grid: &Vec<Vec<char>>) -> Vec<Vec<char>> {
 fn calculate_gps_coordinates(grid: &Vec<Vec<char>>) -> i64 {
     let mut sum = 0;
     for (i, row) in grid.iter().enumerate() {
-        for (j, _) in row.iter().enumerate() {
-            if j + 1 < row.len() && row[j] == '[' && row[j + 1] == ']' {
+        for (j, &c) in row.iter().enumerate() {
+            if c == '[' {
                 sum += (100 * i + j) as i64;
             }
         }
@@ -210,7 +355,6 @@ fn part_two(grid: &Vec<Vec<char>>, directions: &Vec<char>) -> i64 {
 
     let mut current_grid = wide_grid;
     for &dir in directions {
-        println!("Move {}:", dir);
         let (dx, dy) = match dir {
             '^' => (-1, 0),
             'v' => (1, 0),
@@ -223,14 +367,14 @@ fn part_two(grid: &Vec<Vec<char>>, directions: &Vec<char>) -> i64 {
         current_grid = new_grid;
         robot_pos = new_pos;
 
-        // pretty print grid
-        for row in &current_grid {
-            for c in row {
-                print!("{}", c);
-            }
-            println!();
-        }
     }
 
-    calculate_gps_coordinates(&current_grid)
+    // Debug print final GPS calculation
+    let score = calculate_gps_coordinates(&current_grid);
+    println!("Final grid:");
+    for row in &current_grid {
+        println!("{}", row.iter().collect::<String>());
+    }
+
+    score
 }
