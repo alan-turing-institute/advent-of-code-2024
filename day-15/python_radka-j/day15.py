@@ -36,7 +36,7 @@ def update_grid_part1(direction):
     di, dj = get_direction(direction)
 
     robot_row, robot_col = np.argwhere(grid == "@")[0]
-    # see if robot can move in this direction
+    # see if robot can move in the given direction
     i, j = (robot_row + di, robot_col + dj)
     can_move = False
     while grid[i, j] != "#":
@@ -97,8 +97,9 @@ grid = np.array(larger_warehouse)
 # 2. move robot and boxes around
 def get_all_boxes(pos, di, grid):
     """
-    retrieve all boxes above/below robot `pos` on `grid` (direction indicated by `di`)
-    also indicates whether the robot can move in this direction
+    note: this function is used for ^/v  direction only (indicated by `di`)
+    - retrieve all adjacent boxes above/below robot `pos` on `grid`
+    - indicate whether the robot can move in this direction
     """
     # `di` indicates whether moving up or down
     boxes = []
@@ -110,13 +111,13 @@ def get_all_boxes(pos, di, grid):
         if grid[i, j] == "[":
             boxes.append((i, j))
             boxes.append((i, j + 1))
-            # explore positions above the box
+            # explore positions above/below the box
             stack.append((i + di, j))
             stack.append((i + di, j + 1))
         elif grid[i, j] == "]":
             boxes.append((i, j))
             boxes.append((i, j - 1))
-            # explore positions above this
+            # explore positions above/below the box
             stack.append((i + di, j))
             stack.append((i + di, j - 1))
         elif grid[i, j] == "#":
@@ -134,7 +135,7 @@ def update_grid_part2(direction):
     robot_row, robot_col = np.argwhere(grid == "@")[0]
     di, dj = get_direction(direction)
 
-    # if there is no box in the way - just go ahead
+    # if there is no box in the way - just move robot to this pos
     if grid[robot_row + di, robot_col + dj] == ".":
         grid[robot_row + di, robot_col + dj] = "@"
         grid[robot_row, robot_col] = "."
@@ -171,22 +172,23 @@ def update_grid_part2(direction):
             grid[robot_row, robot_col] = "."
             grid[robot_row + di, robot_col + dj] = "@"
 
-    # finaly, moving boxes up/down...
+    # finaly, move boxes up/down...
     elif direction in ["^", "v"]:
         i, j = (robot_row + di, robot_col + dj)
         # if can_move robot, returns all boxes that need moving
         boxes, can_move = get_all_boxes((i, j), di, grid)
+        # sort the boxes in ascending/descending row order (depending on ^/v  direction)
+        # so that don't need to worry about overwriting boxes as update their positions
         if direction == "^":
             boxes = sorted(boxes)
         else:
             boxes = sorted(boxes, reverse=True)
         if can_move:
-            # the boxes are sorted in ascending/descending row order (depending on
-            # direction) so shouldn't need to worry about overwriting
             for i, j in boxes:
-                # move box up
+                # move box up and replace current position by free space
+                # if another box is to move into this position, this pos gets updated in
+                # the next loop (that's why we sort the boxes first)
                 grid[i + di, j] = grid[i, j]
-                # replace pos with whatever was the character below it
                 grid[i, j] = "."
 
             # move robot
