@@ -8,10 +8,21 @@
 
   ;; Part 1
 
-  ;; Minimum cost to end up and end heading in any direction
-  (find-min-cost *maze* *start* *end*)
-
+  (define ans (find-min-cost *maze* *start*))
+  (define-values (minm hdg) (where-min ans *end*))
+  minm
   
+  ;; Part 2
+  
+  ;; Start at the end, heading the other way, and go to the beginning
+  (define backwards-cost-grid (find-min-cost *maze* (locn *end* (modulo (+ hdg 2) 4))))
+
+  ;; Now start at the beginning again, mapping out the paths where the
+  ;; difference in costs to the end is exactly the cost of this edge.
+  (length
+   (remove-duplicates
+    (map :pos
+         (follow-the-yellow-brick-road *maze* backwards-cost-grid *start*))))
   
   )
 
@@ -150,24 +161,43 @@
          [minimiser (index-of ends minimum)])
     (values minimum minimiser)))
 
-
 ;; For part 2
+
+(define (backwards loc)
+  (locn (:pos loc)
+        (modulo (+ (:hdg loc) 2) 4)))
+
 (define (follow-the-yellow-brick-road g cg here)
-  (let loop ([xs (list (car here))]
-             [frontier (list here)])
+  ;; here is a locn
+  (let loop ([xs (list here)]
+             [frontier (list here)]
+             [count 0])
+    ;; (displayln frontier)
+    ;; (displayln "")
     (if (null? frontier)
         xs
         (let ([new-frontier
-               (append-map (λ (f) 
-                             (let* ([loc (car f)]
-                                    [cst (cost-ref cg loc)]
-                                    [nbrs (neighbours-of g (cons loc 0))])
-                               (filter (λ (x)
-                                         (equal? cst (+ (cdr x) (cost-ref cg (car x)))))
-                                       nbrs)))
-                           frontier)])
-          (loop (append new-frontier xs) new-frontier)
+               (append-map
+                (λ (loc)
+                  ;; (displayln (format "Finding neighbours of ~a ..." loc))
+                  (let* ([cst (cost-ref cg loc)]
+                         [nbrs (map (λ (p) (cons (backwards (car p)) (cdr p)))
+                                    (neighbours-of g (cons (backwards loc) 0)))])
+                    ;; (displayln (format "...which has cost ~a" cst))
+                    ;; (displayln (format "... which are ~a" nbrs))
+                    ;; (displayln (format "... which have costs ~a" (map (λ (x) (cost-ref cg (car x))) 
+                    ;;                                                   nbrs)))
+                    (filter-map (λ (x)
+                                  (and (equal? cst (+ (cdr x) (cost-ref cg (car x))))
+                                       (car x)))
+                                nbrs)))
+                frontier)])
+          ;; (when (equal? count 10)
+          ;;   (raise-user-error "Halting with " xs))
+          (loop (append new-frontier xs) new-frontier (+ count 1))
           ))))
+
+
 
 
 ;;; ------------------------------------------------------------------------------------------
@@ -236,7 +266,20 @@ END
 
   ;; Now start at the beginning again, mapping out the paths where the
   ;; difference in costs to the end is exactly the cost of this edge.
-  (follow-the-yellow-brick-road *maze1* backwards-cost-grid1 *start1*)
+  (length
+   (remove-duplicates
+    (map :pos
+         (follow-the-yellow-brick-road *maze1* backwards-cost-grid1 *start1*))))
+
+
+  (define backwards-cost-grid2 (find-min-cost *maze2* (locn *end2* (modulo (+ hdg2 2) 4))))
+
+  ;; Now start at the beginning again, mapping out the paths where the
+  ;; difference in costs to the end is exactly the cost of this edge.
+  (length
+   (remove-duplicates
+    (map :pos
+         (follow-the-yellow-brick-road *maze2* backwards-cost-grid2 *start2*))))
 
   
   )
