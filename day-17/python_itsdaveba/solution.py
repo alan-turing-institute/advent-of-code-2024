@@ -18,7 +18,7 @@ def get_output(register, program):
         opcode, literal = program[ip: ip + 2]
         ip += 2
 
-        # literal and combo operands
+        # combo operand
         if 4 <= literal < 7:
             combo = register[chr(literal - 4 + ord("A"))]
         else:
