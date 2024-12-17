@@ -25,22 +25,27 @@
   ;; 0 3 | A <- A >> 3            ; get the next three bits of A
   ;; 3 0 | jump (ne? A 0) .start  ; and repeat
 
-  (define (find-A-to-produce val start memory)
-    (for/or ([A (in-range start (+ start 8))])
-      (let ([output
-             (machine/run (<state> A 0 0 0) memory)])
-        (and (equal? (car output) val)
-             A))))
+  (define (find-As-to-produce val starts memory)
+    (append-map
+     (λ (start)
+       (filter-map
+        (λ (A)
+          (let ([output
+                 (machine/run (<state> A 0 0 0) memory)])
+            ;; (displayln (format "A = ~a: ~a" A output))
+            (and (equal? (car output) val)
+                 A)))
+        (range start (+ start 8))))
+     starts))
 
-  (machine/run (<state> 4329 0 0 0) *memory*)
+  ;; How to replace failure by a list of successes!
   
-  (for/fold ([A 0])
+  (for/fold ([As '(0)])
             ([op (reverse (vector->list *memory*))])
-    (let ([next-A 
-           (find-A-to-produce op A *memory*)])
-      (displayln next-A)
-      (arithmetic-shift next-A 3)))
-
+    (let ([next-As 
+           (find-As-to-produce op As *memory*)])
+      (displayln next-As)
+      (map (curryr arithmetic-shift 3) next-As)))
   
   )
 
