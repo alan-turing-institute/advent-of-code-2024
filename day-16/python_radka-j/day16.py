@@ -5,34 +5,16 @@ with open("input.txt") as f:
 
 grid = np.array([list(l) for l in lines])
 
+# =================================================================
+# FUNCTIONS
+# =================================================================
+
 
 def change_direction(direction):
     if direction == (0, 1) or direction == (0, -1):
         return [(1, 0), (-1, 0)]
     else:
         return [(0, 1), (0, -1)]
-
-
-# =================================================================
-# Djikstra --> build "priority queue":
-# - a node is a position and a direction
-# - values are distance to each unvisited node from the start node
-# - start with infinite distance for all nodes except start
-# =================================================================
-queue = {}
-
-directions = [(0, 1), (1, 0), (-1, 0), (0, -1)]
-for i, line in enumerate(grid):
-    for j, char in enumerate(line):
-        if char == "E" or char == "." or char == "S":
-            for direction in directions:
-                node = ((i, j), direction)
-                queue[node] = np.inf
-            if char == "S":
-                start_i = i
-                start_j = j
-
-queue[((start_i, start_j), (0, 1))] = 0
 
 
 def next_moves(curr_pos, curr_direction):
@@ -59,11 +41,15 @@ def next_moves(curr_pos, curr_direction):
 
 def update_neighbours(curr_node, new_node, curr_score, neighbours):
     """
-    - if haven't seen new_node yet,
-        - just add it to the dictionary with curr_node as its best neighour (so far)
+    PART 2: for each node visited, keep track of which node(s)! preceded it in the
+    shortest path to that node - note that this can be multiple so we keep a list
+    `neighbours` = {<node>: (<shortest distance>, [<all preceding nodes at this distance>])}
+
+    - if haven't seen new_node yet
+        - just add it to the neighbours dictionary with curr_node as its best neighour (so far)
     - otherwise
-        - if we got to new_node faster (lower score) than before, start new list of prior
-            neighbours
+        - if we got to new_node faster (lower score) than ever before, start new list of
+            prior neighbours
         - if the score/distance is the same as previously recorded, than just append
             neihbour to existing list
     """
@@ -78,9 +64,31 @@ def update_neighbours(curr_node, new_node, curr_score, neighbours):
     return neighbours
 
 
-# PART 2: for each node visited, keep track of which node(s)! preceded it in the
-# shortest path to that node - note that this can be multiple so we keep a list
-# {<node>: (<shortest distance>, [<all preceding nodes at this distance>])}
+# =================================================================
+# Djikstra --> build "priority queue":
+# - a node is a position and a direction
+# - values are distance to each unvisited node from the start node
+# - start with infinite distance for all nodes except start
+# =================================================================
+queue = {}
+
+directions = [(0, 1), (1, 0), (-1, 0), (0, -1)]
+for i, line in enumerate(grid):
+    for j, char in enumerate(line):
+        if char == "E" or char == "." or char == "S":
+            for direction in directions:
+                node = ((i, j), direction)
+                queue[node] = np.inf
+            if char == "S":
+                start_i = i
+                start_j = j
+
+queue[((start_i, start_j), (0, 1))] = 0
+
+
+# =================================================================
+# Find all shortest paths to the end node
+# =================================================================
 neighbours = {}
 lowest_score = np.inf
 while queue:
