@@ -27,7 +27,7 @@ def get_output(register, program):
         # instructions
         match opcode:
             case 0:  # adv
-                register["A"] //= 2 ** combo
+                register["A"] >>= combo
             case 1:  # bxl
                 register["B"] ^= literal
             case 2:  # bst
@@ -40,9 +40,9 @@ def get_output(register, program):
             case 5:  # out
                 output.append(combo % 8)
             case 6:  # bdv
-                register["B"] = register["A"] // 2 ** combo
+                register["B"] = register["A"] >> combo
             case 7:  # cdv
-                register["C"] = register["A"] // 2 ** combo
+                register["C"] = register["A"] >> combo
 
     return output
 
