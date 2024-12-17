@@ -11,6 +11,9 @@ grid = np.array([list(l) for l in lines])
 
 
 def change_direction(direction):
+    """
+    turn 90 degrees left or right from direction
+    """
     if direction == (0, 1) or direction == (0, -1):
         return [(1, 0), (-1, 0)]
     else:
@@ -43,14 +46,17 @@ def update_neighbours(curr_node, new_node, curr_score, neighbours):
     """
     PART 2: for each node visited, keep track of which node(s)! preceded it in the
     shortest path to that node - note that this can be multiple so we keep a list
-    `neighbours` = {<node>: (<shortest distance>, [<all preceding nodes at this distance>])}
+    `neighbours` = {<node>:
+        (<shortest distance>, [<all preceding/adjacent nodes at this distance>])
+    }
 
-    - if haven't seen new_node yet
-        - just add it to the neighbours dictionary with curr_node as its best neighour (so far)
+    update the neighbours dictionary based on the following rules:
+    - if haven't seen new_node before
+        - just add it to the neighbours dictionary with curr_node as its best neighour
     - otherwise
-        - if we got to new_node faster (lower score) than ever before, start new list of
-            prior neighbours
-        - if the score/distance is the same as previously recorded, than just append
+        - if we just got to new_node faster (lower score) than ever before, start a new
+            list of prior neighbours
+        - if the score/distance is the same as previously recorded, then just append
             neihbour to existing list
     """
     if new_node not in neighbours:
@@ -87,7 +93,7 @@ queue[((start_i, start_j), (0, 1))] = 0
 
 
 # =================================================================
-# Find all shortest paths to the end node
+# Find all shortest paths from start to end node
 # =================================================================
 neighbours = {}
 lowest_score = np.inf
@@ -111,8 +117,7 @@ while queue:
         end_node = curr_node
         if curr_score < lowest_score:
             lowest_score = curr_score
-        # for part 1 - could end once get here
-        # break
+        # part 1: could end once get here
 
     # update distances to neighbours that have not visited yet
     # neighbour = move forward or change direction (right/left)
@@ -120,6 +125,7 @@ while queue:
     for new_node, new_score in zip(moves, scores):
         if new_node in queue:
             queue[new_node] = min(queue[new_node], new_score)
+        # part 2: keep track of adjacent nodes on shortest paths to the end
         neighbours = update_neighbours(curr_node, new_node, new_score, neighbours)
 
     # remove current node from queue (the univisited set)
@@ -127,7 +133,8 @@ while queue:
 
 print("PART 1:", lowest_score)
 
-# get all nodes in all paths that led to the end node (at shortest possible distance travelled)
+# get all unique nodes in all paths that led to the end node (at shortest possible
+# distance travelled)
 stack = [end_node]
 node_list = set()
 while stack:
@@ -137,4 +144,5 @@ while stack:
         if node not in node_list:
             stack.append(node)
 
-print("PART 2: ", len(set([pos for pos, direction in node_list])))
+# nodes are defined by position and direction - count just the unique positions
+print("PART 2: ", len(set([pos for pos, _ in node_list])))
