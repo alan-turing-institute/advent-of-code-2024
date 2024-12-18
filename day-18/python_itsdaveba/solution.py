@@ -56,7 +56,7 @@ print("Part One:", shortest_distance(grid, START_POS, END_POS))
 # Brute Force (no proud of this :/)
 for i in range(NUM_BYTES, len(bytes)):
     grid[tuple(bytes[i])] = CORRUPTED
-    if shortest_distance(grid, START_POS, END_POS) < 0:
+    if shortest_distance(grid, START_POS, END_POS) < 0:  # no path
         break
 
 print("Part Two:", ",".join(map(str, bytes[i])))
