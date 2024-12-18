@@ -17,7 +17,7 @@ directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]  # up, down, left, right
 
 
 # Breadth First Search
-def shortest_distance(grid, start_pos, end_pos):
+def shortest_distance(grid, start_pos, end_pos, prev):
     visited = np.zeros_like(grid, dtype=bool)
     visited[start_pos] = True
     queue = deque([(0, start_pos)])  # dist, coord
@@ -38,25 +38,39 @@ def shortest_distance(grid, start_pos, end_pos):
         no_visited = ~visited[next_coords[:, 0], next_coords[:, 1]]
         next_coords = next_coords[no_visited]
 
-        # visit and push to queue
+        # visit, update prev, and push to queue
         visited[next_coords[:, 0], next_coords[:, 1]] = True
-        queue.extend(map(lambda x: (dist + 1, tuple(x)), next_coords))
+        prev.update(dict.fromkeys(map(tuple, next_coords), coord))
+        queue.extend(map(lambda nc: (dist + 1, tuple(nc)), next_coords))
 
     if queue:
         return queue[0][0]  # shortest distance
     return -1  # no path
 
 
+def get_path(start_pos, end_pos, prev):
+    coord = end_pos
+    path = [coord]
+    while coord != start_pos:
+        coord = prev[coord]
+        path.append(coord)
+    return path[::-1]
+
+
+prev = {}
 grid = np.full(SHAPE, SAFE, dtype=int)
-grid[bytes[:NUM_BYTES][:, 0], bytes[:NUM_BYTES][:, 1]] = CORRUPTED
+grid[bytes[:NUM_BYTES][:, 0], bytes[:NUM_BYTES][:, 1]] = CORRUPTED  # update grid
 
-print("Part One:", shortest_distance(grid, START_POS, END_POS))
+print("Part One:", shortest_distance(grid, START_POS, END_POS, prev))
 
 
-# Brute Force (no proud of this :/)
-for i in range(NUM_BYTES, len(bytes)):
-    grid[tuple(bytes[i])] = CORRUPTED
-    if shortest_distance(grid, START_POS, END_POS) < 0:  # no path
-        break
+path_set = set(get_path(START_POS, END_POS, prev))
 
-print("Part Two:", ",".join(map(str, bytes[i])))
+for byte in map(tuple, bytes[NUM_BYTES:]):
+    grid[byte] = CORRUPTED  # update grid
+    if byte in path_set:  # check if the corrupted byte lies on the optimal path
+        if shortest_distance(grid, START_POS, END_POS, prev) < 0:  # no path
+            break
+        path_set = set(get_path(START_POS, END_POS, prev))  # new optimal path
+
+print("Part Two:", ",".join(map(str, byte)))
