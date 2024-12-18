@@ -18,11 +18,9 @@ directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]  # up, down, left, right
 
 # Breadth First Search
 def shortest_distance(grid, start_pos, end_pos):
-    dist = 0
     visited = np.zeros_like(grid, dtype=bool)
-
     visited[start_pos] = True
-    queue = deque([(dist, start_pos)])  # dist, coord
+    queue = deque([(0, start_pos)])  # dist, coord
 
     while queue and queue[0][1] != end_pos:
         dist, coord = queue.popleft()
@@ -40,7 +38,7 @@ def shortest_distance(grid, start_pos, end_pos):
         no_visited = ~visited[next_coords[:, 0], next_coords[:, 1]]
         next_coords = next_coords[no_visited]
 
-        # visit and push to pq
+        # visit and push to queue
         visited[next_coords[:, 0], next_coords[:, 1]] = True
         queue.extend(map(lambda x: (dist + 1, tuple(x)), next_coords))
 
