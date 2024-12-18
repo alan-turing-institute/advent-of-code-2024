@@ -55,7 +55,7 @@ grid[bytes[:NUM_BYTES][:, 0], bytes[:NUM_BYTES][:, 1]] = CORRUPTED
 print("Part One:", shortest_distance(grid, START_POS, END_POS))
 
 
-# Brute Force
+# Brute Force (no proud of this :/)
 for i in range(NUM_BYTES, len(bytes)):
     grid[tuple(bytes[i])] = CORRUPTED
     if shortest_distance(grid, START_POS, END_POS) < 0:
