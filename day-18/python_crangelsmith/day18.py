@@ -81,7 +81,7 @@ def simulate(matrix):
 
     _, final_positions = move_position((0, 0), final_path)
 
-    return final_path, final_positions
+    return final_positions
 
 
 if __name__ == "__main__":
@@ -98,8 +98,8 @@ if __name__ == "__main__":
 
         matrix[Y, X] = "#"
 
-    final_path, visited_states = simulate(matrix)
-    print("Part 1:", len(final_path))
+    visited_states = simulate(matrix)
+    print("Part 1:", len(visited_states))
 
     ## Part 2
     ## if the new coordinate is not in the visited states, skip it
@@ -113,7 +113,7 @@ if __name__ == "__main__":
             continue
 
         n_iterations += 1
-        final_path, visited_states = simulate(matrix)
+        visited_states = simulate(matrix)
 
         if len(visited_states) == 0:
             print("Part 2:", new_X, new_Y)
