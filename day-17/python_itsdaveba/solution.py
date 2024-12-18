@@ -61,7 +61,7 @@ while stack:
         break
     target = program[index]
     for bits in range(7, -1, -1):
-        next_value = value * 8 + bits
+        next_value = (value << 3) + bits
         register["A"] = next_value
         output = get_output(register, program)
         if output[0] == target:
