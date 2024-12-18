@@ -49,7 +49,7 @@ def shortest_distance(grid, start_pos, end_pos):
     return -1  # no path
 
 
-grid = np.zeros(SHAPE, dtype=int)
+grid = np.full(SHAPE, SAFE, dtype=int)
 grid[bytes[:NUM_BYTES][:, 0], bytes[:NUM_BYTES][:, 1]] = CORRUPTED
 
 print("Part One:", shortest_distance(grid, START_POS, END_POS))
