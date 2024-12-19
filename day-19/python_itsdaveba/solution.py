@@ -3,18 +3,23 @@ with open("input.txt") as file:
 
 patterns, designs = input.split("\n\n")
 patterns = set(patterns.split(", "))
-max_pattern_length = max(map(len, patterns))
 designs = designs.splitlines()
-impossible = set()
+
+possible = {"": 1}  # design, num_ways
+max_pattern_length = max(map(len, patterns))
 
 
-def is_possible(design):
+def num_possible_ways(design):
+    counter = 0
     for i in range(1, min(max_pattern_length, len(design)) + 1):
-        if design[:i] in patterns and design[i:] not in impossible:
-            if design[i:] == "" or is_possible(design[i:]):
-                return True
-    impossible.add(design)
-    return False
+        if design[:i] in patterns:
+            if design[i:] not in possible:
+                possible[design[i:]] = num_possible_ways(design[i:])
+            counter += possible[design[i:]]
+    return counter
 
 
-print("Part One:", sum(map(is_possible, designs)))
+solution = list(map(num_possible_ways, designs))
+
+print("Part One:", sum(map(bool, solution)))
+print("Part Two:", sum(solution))
