@@ -18,33 +18,3 @@ def is_possible(design):
 
 
 print("Part One:", sum(map(is_possible, designs)))
-    input = file.read()
-
-patterns, designs = input.split("\n\n")
-patterns = patterns.split(", ")
-designs = designs.splitlines()
-
-
-def is_possible(design):
-    if design == "":
-        return True
-    for pattern in patterns:
-        if design.startswith(pattern):
-            if is_possible(design[len(pattern):]):
-                return True
-    return False
-
-
-possible = 0
-for design in designs:
-    if is_possible(design):
-        possible += 1
-
-print("Part One:", possible)
-
-
-# arrange towels
-# pattern of colored stripes
-# stripe can be [w]hite, bl[u]e, [b]lack, [r]ed or [g]reen
-# you can't reverse the pattern
-# list of designs
