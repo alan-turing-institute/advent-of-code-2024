@@ -25,6 +25,9 @@ for _ in range(len(spaces) + 1):
 end_pos = tuple(np.argwhere(grid == "E")[0])
 track.append(end_pos)
 
+# avoid having to recalculate track index for positions at each step to speed up
+travel_time = {pos: i for i, pos in enumerate(track)}
+
 # ===============================================
 # PART 1
 # - check one wall at a time
@@ -43,7 +46,7 @@ for wall in walls:
     for direction in directions:
         new_pos = (wall[0] + direction[0], wall[1] + direction[1])
         if new_pos in track:
-            adjacent_positions.append(track.index(new_pos))
+            adjacent_positions.append(travel_time[new_pos])
     # ignore cases where:
     # - wall is not track adjacent
     # - only one part of track is wall adjacent
@@ -53,7 +56,7 @@ for wall in walls:
         if abs(adjacent_positions[0] - adjacent_positions[1]) - 2 >= 100:
             count += 1
 
-print(count)
+print("part 1: ", count)
 
 
 # ===============================================
@@ -63,12 +66,10 @@ print(count)
 # - can we get them closer by cheating?
 # ===============================================
 
-# avoid having to recalculate track index for positions at each step to speed up
-travel_time = {pos: i for i, pos in enumerate(track)}
 
 count = 0
 for i, pos1 in enumerate(track):
-    for j, pos2 in enumerate(track[i:]):
+    for j, pos2 in enumerate(track[100 + i :]):
         # distance on grid between positions has to fit within the cheat
         dist = abs(pos1[0] - pos2[0]) + abs(pos1[1] - pos2[1])
         if dist <= 20:
@@ -76,4 +77,4 @@ for i, pos1 in enumerate(track):
             # (taking into account the cheat penalty)
             if abs(travel_time[pos1] - travel_time[pos2]) - dist >= 100:
                 count += 1
-print(count)
+print("part 2: ", count)
