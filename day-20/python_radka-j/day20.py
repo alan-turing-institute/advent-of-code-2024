@@ -64,7 +64,7 @@ print(count)
 # ===============================================
 
 # avoid having to recalculate track index for positions at each step to speed up
-dists = {pos: i for i, pos in enumerate(track)}
+travel_time = {pos: i for i, pos in enumerate(track)}
 
 count = 0
 for i, pos1 in enumerate(track):
@@ -74,6 +74,6 @@ for i, pos1 in enumerate(track):
         if dist <= 20:
             # is the time travelled sufficiently reduced with this cheat
             # (taking into account the cheat penalty)
-            if abs(dists[pos1] - dists[pos2]) - dist >= 100:
+            if abs(travel_time[pos1] - travel_time[pos2]) - dist >= 100:
                 count += 1
 print(count)
