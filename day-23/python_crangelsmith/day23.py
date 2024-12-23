@@ -36,6 +36,7 @@ if __name__ == "__main__":
                         if common_neighbor.startswith("t") or node1.startswith("t") or node2.startswith("t"):
                             interconected.add(tuple(sorted([node1, node2, common_neighbor])))
 
+    print("Part1:", len(interconected))
 
     cliques = list(nx.enumerate_all_cliques(G))
 
@@ -47,7 +48,7 @@ if __name__ == "__main__":
             index_max = i
 
 
-    print(','.join(sorted(cliques[index_max])))
+    print("Part2:", ','.join(sorted(cliques[index_max])))
 
 
 
