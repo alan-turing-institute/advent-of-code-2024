@@ -30,6 +30,8 @@ After the first couple of days I realised I needed to tell it where to get the i
 
 ## Log
 
+Attempts in December 2024 (attempting to solve one day later):
+
 | Day    | Part 1 solved | Part 1 prompts | Part 2 solved | Part 2 prompts | Notes |
 | ---- | ---- | ---- | ----| ---- |  ----------- |
 | 1  | ✅ | 3 | ✅ | 1 | Had to prompt it to write something to load the input file, and then tell it the input file format. Otherwise solved it without issues. |
@@ -40,11 +42,16 @@ After the first couple of days I realised I needed to tell it where to get the i
 | 6  | ✅ | 1 | ✅ | 1 | Part 2 solution was slow (38s). |
 | 7  | ✅ | 2 | ✅ | 2 | The first time the part 1 script was incorrect initially (other than issues with me specifying the input file on the first couple of days), but it was able to fix it after prompting it that it returned 0 for the example. The part 1 implementation took 34s to run. The first part 2 implementation was too slow, but asking it to make it more efficient worked - it added recursion and checking whether intermediate results had become too big. However, it mentioned memoization could make it more efficient but didn't add it to the script. |
 | 8  | ✅ | 2 | ✅ | 4 | Part 1 incorrect initially, had not interpreted the antennas along a line logic correctly and had added some unused and unneeded variables too. I read the problem and the generated script to figure out how to prompt it to correct it with the 2nd prompt. Part 2 took me 4 prompts to correct the logic for finding antinode locations. The last prompt gave me two outputs to give a preference between - one gives the correct answer and the other is wrong. The one that gives the correct answer has a block of unused code using `gcd` which was used in previous incorrect answers. Our Slack channel had messages about the part 2 wording being difficult to understand. |
-| 9  | ❌ | 13 |  |  | Attempt 1: Gave up on part 1 after 13 prompts. I think I'm not helping by being tired and not understanding the problem fully myself. Will try again in a fresh chat. |
-| 10  |  |  |  |  |  |
-| 11   |  |  |  |  |  |
-| 12  |  |  |  |  |  |
-| 13  |  |  |  |  |  |
+| 9  | ❌ | 13 |  |  | Gave up on part 1 after 13 prompts. I think I'm not helping by being tired and not understanding the problem fully myself. Last attempt pre-Christmas. |
+
+Attempts in January 2025 (increased caveats around whether ChatGPT has been updated with/has access to the problems and their solutions, either via RAG or training):
+
+| Day    | Part 1 solved | Part 1 prompts | Part 2 solved | Part 2 prompts | Notes |
+| ---- | ---- | ---- | ----| ---- |  ----------- |
+| 10  | ✅ | 1 | ✅ | 1 |  |
+| 11   | ✅ | 1 | ✅ | 7 | Part 2 it failed to come up with a more efficient solution itself. It suggested a numpy-based matrix multiplication approach that I haven't tried to understand but gave an answer much too large. I prompted it with a (strong) hint based on Radka's answer to get it to solve it. |
+| 12  | ✅ | 1 | ❌ | 8 | First attempt for part 2 only renamed a variable from `perimeter` to `sides`. Later attempts tried to do something different but still fail to return a different answer to part 1. I may be contributing to the problem because the problem is something I often get wrong - it's caused by lines being drawn in-between grid points. |
+| 13  | ✅ | 3 | ✅ | 14 | Part 1 took a few prompts to get it to parse the input correctly. Ended up in a big loop for part 2 of it failing to get a correct solution. I prompted it about simultaneous equations (again stealing a glance at other people's solution first) but it didn't actually update the script at first despite it telling me how the logic would work... It also switched to only returning updated portions of the script, rather than a whole updated script, for a while. |
 | 14  |  |  |  |  |  |
 | 15  |  |  |  |  |  |
 | 16  |  |  |  |  |  |
@@ -66,7 +73,7 @@ After the first couple of days I realised I needed to tell it where to get the i
 - I'm not paying any attention to the explanations it gives after the script it generates. Maybe they would give clues for how to fix things/where there are issues in interpreting the problem.
 - So far, just telling it the output is wrong doesn't seem to be enough for it to spot/correct the error.
   - but this did work for day 7 part 1.
-- Sometimes it correctly articulates the problem in its descriptions around the code, but then the script itself misses some of the nuances in the problem/logic.
+- Sometimes it correctly articulates the problem in its descriptions around the code, but then the script itself misses some of the nuances in the problem/logic, doesn't implement what it said at all, or leaves the previous version of the script unchanged.
 - Can I be sure that ChatGPT isn't cheating itself? E.g. does it already have access to other people's answers? E.g. a "What was the problem for Advent of Code 2024, day 1?" prompt causes it to search the internet and return a summary and a link to a YouTube video of someone solving it...
 - Sometimes it asks you to evaluate a new version of ChatGPT by giving two outputs and asking you which you prefer.
 - Day 8 included unused code, but tricky to spot at a first glance.
@@ -76,3 +83,4 @@ After the first couple of days I realised I needed to tell it where to get the i
 - A couple of the ones that needed more prompting involved some more complex 'spatial'-type logic, e.g. variations of things along diagonals.
 - There might be a better way to prompt it to make edits, but prompts for small changes require generating the whole script (and any prose around it) again, which is pretty slow.
 - On Day 9 it started giving me Chat GPT-4o with Canvas, which gives an editor like environment with a Python runtime and some other features. I'm going to mostly stick to conventional chat style prompting. It generates less text to explain the script in this mode.
+- Sometimes it feels like trying to teach someone who just refuses to learn or is completely missing the point.
