@@ -42,12 +42,7 @@ Attempts in December 2024 (attempting to solve one day later):
 | 6  | ✅ | 1 | ✅ | 1 | Part 2 solution was slow (38s). |
 | 7  | ✅ | 2 | ✅ | 2 | The first time the part 1 script was incorrect initially (other than issues with me specifying the input file on the first couple of days), but it was able to fix it after prompting it that it returned 0 for the example. The part 1 implementation took 34s to run. The first part 2 implementation was too slow, but asking it to make it more efficient worked - it added recursion and checking whether intermediate results had become too big. However, it mentioned memoization could make it more efficient but didn't add it to the script. |
 | 8  | ✅ | 2 | ✅ | 4 | Part 1 incorrect initially, had not interpreted the antennas along a line logic correctly and had added some unused and unneeded variables too. I read the problem and the generated script to figure out how to prompt it to correct it with the 2nd prompt. Part 2 took me 4 prompts to correct the logic for finding antinode locations. The last prompt gave me two outputs to give a preference between - one gives the correct answer and the other is wrong. The one that gives the correct answer has a block of unused code using `gcd` which was used in previous incorrect answers. Our Slack channel had messages about the part 2 wording being difficult to understand. |
-| 9  | ❌ | 13 | NA | NA | Gave up on part 1 after 13 prompts. I think I'm not helping by being tired and not understanding the problem fully myself. Last attempt pre-Christmas. |
-
-Attempts in January 2025 (increased caveats around whether ChatGPT has been updated with/has access to the problems and their solutions, either via RAG or training):
-
-| Day    | Part 1 solved | Part 1 prompts | Part 2 solved | Part 2 prompts | Notes |
-| ---- | ---- | ---- | ----| ---- |  ----------- |
+| 9  | ❌ | 13 | NA | NA | Gave up on part 1 after 13 prompts. I think I'm not helping by being tired and not understanding the problem fully myself. Last attempt pre-Christmas - remaining solutions may have additional caveats around whether ChatGPT has seen solutions in the training data/is using RAG to get them. |
 | 10  | ✅ | 1 | ✅ | 1 |  |
 | 11   | ✅ | 1 | ✅ | 7 | Part 2 it failed to come up with a more efficient solution itself. It suggested a numpy-based matrix multiplication approach that I haven't tried to understand but gave an answer much too large. I prompted it with a (strong) hint based on Radka's answer to get it to solve it. |
 | 12  | ✅ | 1 | ❌ | 8 | First attempt for part 2 only renamed a variable from `perimeter` to `sides`. Later attempts tried to do something different but still fail to return a different answer to part 1. I may be contributing to the problem because the problem is something I often get wrong - it's caused by lines being drawn in-between grid points. |
@@ -56,9 +51,9 @@ Attempts in January 2025 (increased caveats around whether ChatGPT has been upda
 | 15  | ✅ | 6 | ❌ | 7 | Took a lot of hand holding in part 1 to get the logic for moving multiple boxes correct. I then ran out of patience trying to get it to understand the movement rules for wide boxes. |
 | 16  | ✅ | 1 | ❌ | 11 | Gave up trying to get it to solve part 2 but some of my prompts were likely misleading or unhelpful. |
 | 17  | ✅ | 3 | ✅ | 12 | Part 2 only with a lot of effort and drawing from other people's solutions to tell ChatGPT the way to approach creating a more efficient solution. |
-| 18  |  |  |  |  |  |
-| 19  |  |  |  |  |  |
-| 20  |  |  |  |  |  |
+| 18  | ✅ | 3 | ✅ | 1 | Part 1 it initially failed due to assuming the grid size would be the same as the example. |
+| 19  | ✅ | 3 | ✅ | 1 | Pretty smooth sailing - was able to fix a bug and then speed up part 1 without any hand holding. |
+| 20  | ✅ | 11 | ❌ | 4 | First part 1 prompt gave up generating Python at the end and left some plain text hanging around. Got a very slow solution for part 1 after a lot of going round in loops with prompts that resulted in either a slow script or a script that returned 0. Quickly ran out of patience for part 2 after it was again much too slow. |
 | 21  |  |  |  |  |  |
 | 22  |  |  |  |  |  |
 | 23  |  |  |  |  |  |
