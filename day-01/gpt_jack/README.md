@@ -52,8 +52,8 @@ Attempts in January 2025 (increased caveats around whether ChatGPT has been upda
 | 11   | ✅ | 1 | ✅ | 7 | Part 2 it failed to come up with a more efficient solution itself. It suggested a numpy-based matrix multiplication approach that I haven't tried to understand but gave an answer much too large. I prompted it with a (strong) hint based on Radka's answer to get it to solve it. |
 | 12  | ✅ | 1 | ❌ | 8 | First attempt for part 2 only renamed a variable from `perimeter` to `sides`. Later attempts tried to do something different but still fail to return a different answer to part 1. I may be contributing to the problem because the problem is something I often get wrong - it's caused by lines being drawn in-between grid points. |
 | 13  | ✅ | 3 | ✅ | 14 | Part 1 took a few prompts to get it to parse the input correctly. Ended up in a big loop for part 2 of it failing to get a correct solution. I prompted it about simultaneous equations (again stealing a glance at other people's solution first) but it didn't actually update the script at first despite it telling me how the logic would work... It also switched to only returning updated portions of the script, rather than a whole updated script, for a while. |
-| 14  |  |  |  |  |  |
-| 15  |  |  |  |  |  |
+| 14  | ✅ | 1 | ✅ | 5 | Came up with some crazy ideas for part 2 (that didn't work), including one using DBSCAN. After a few prompts to get it to try something different it tried something based on checking for densely populated sub-regions, which worked (and kind of blew my mind). |
+| 15  | ✅ | 6 | ❌ | 7 | Took a lot of hand holding in part 1 to get the logic for moving multiple boxes correct. I then ran out of patience trying to get it to understand the movement rules for wide boxes. |
 | 16  |  |  |  |  |  |
 | 17  |  |  |  |  |  |
 | 18  |  |  |  |  |  |
@@ -84,3 +84,4 @@ Attempts in January 2025 (increased caveats around whether ChatGPT has been upda
 - There might be a better way to prompt it to make edits, but prompts for small changes require generating the whole script (and any prose around it) again, which is pretty slow.
 - On Day 9 it started giving me Chat GPT-4o with Canvas, which gives an editor like environment with a Python runtime and some other features. I'm going to mostly stick to conventional chat style prompting. It generates less text to explain the script in this mode.
 - Sometimes it feels like trying to teach someone who just refuses to learn or is completely missing the point.
+- Sometimes it returns updated functions rather than a whole updated script.
