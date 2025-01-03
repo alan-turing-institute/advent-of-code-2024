@@ -42,7 +42,7 @@ Attempts in December 2024 (attempting to solve one day later):
 | 6  | ✅ | 1 | ✅ | 1 | Part 2 solution was slow (38s). |
 | 7  | ✅ | 2 | ✅ | 2 | The first time the part 1 script was incorrect initially (other than issues with me specifying the input file on the first couple of days), but it was able to fix it after prompting it that it returned 0 for the example. The part 1 implementation took 34s to run. The first part 2 implementation was too slow, but asking it to make it more efficient worked - it added recursion and checking whether intermediate results had become too big. However, it mentioned memoization could make it more efficient but didn't add it to the script. |
 | 8  | ✅ | 2 | ✅ | 4 | Part 1 incorrect initially, had not interpreted the antennas along a line logic correctly and had added some unused and unneeded variables too. I read the problem and the generated script to figure out how to prompt it to correct it with the 2nd prompt. Part 2 took me 4 prompts to correct the logic for finding antinode locations. The last prompt gave me two outputs to give a preference between - one gives the correct answer and the other is wrong. The one that gives the correct answer has a block of unused code using `gcd` which was used in previous incorrect answers. Our Slack channel had messages about the part 2 wording being difficult to understand. |
-| 9  | ❌ | 13 |  |  | Gave up on part 1 after 13 prompts. I think I'm not helping by being tired and not understanding the problem fully myself. Last attempt pre-Christmas. |
+| 9  | ❌ | 13 | NA | NA | Gave up on part 1 after 13 prompts. I think I'm not helping by being tired and not understanding the problem fully myself. Last attempt pre-Christmas. |
 
 Attempts in January 2025 (increased caveats around whether ChatGPT has been updated with/has access to the problems and their solutions, either via RAG or training):
 
@@ -54,8 +54,8 @@ Attempts in January 2025 (increased caveats around whether ChatGPT has been upda
 | 13  | ✅ | 3 | ✅ | 14 | Part 1 took a few prompts to get it to parse the input correctly. Ended up in a big loop for part 2 of it failing to get a correct solution. I prompted it about simultaneous equations (again stealing a glance at other people's solution first) but it didn't actually update the script at first despite it telling me how the logic would work... It also switched to only returning updated portions of the script, rather than a whole updated script, for a while. |
 | 14  | ✅ | 1 | ✅ | 5 | Came up with some crazy ideas for part 2 (that didn't work), including one using DBSCAN. After a few prompts to get it to try something different it tried something based on checking for densely populated sub-regions, which worked (and kind of blew my mind). |
 | 15  | ✅ | 6 | ❌ | 7 | Took a lot of hand holding in part 1 to get the logic for moving multiple boxes correct. I then ran out of patience trying to get it to understand the movement rules for wide boxes. |
-| 16  |  |  |  |  |  |
-| 17  |  |  |  |  |  |
+| 16  | ✅ | 1 | ❌ | 11 | Gave up trying to get it to solve part 2 but some of my prompts were likely misleading or unhelpful. |
+| 17  | ✅ | 3 | ✅ | 12 | Part 2 only with a lot of effort and drawing from other people's solutions to tell ChatGPT the way to approach creating a more efficient solution. |
 | 18  |  |  |  |  |  |
 | 19  |  |  |  |  |  |
 | 20  |  |  |  |  |  |
@@ -73,7 +73,7 @@ Attempts in January 2025 (increased caveats around whether ChatGPT has been upda
 - I'm not paying any attention to the explanations it gives after the script it generates. Maybe they would give clues for how to fix things/where there are issues in interpreting the problem.
 - So far, just telling it the output is wrong doesn't seem to be enough for it to spot/correct the error.
   - but this did work for day 7 part 1.
-- Sometimes it correctly articulates the problem in its descriptions around the code, but then the script itself misses some of the nuances in the problem/logic, doesn't implement what it said at all, or leaves the previous version of the script unchanged.
+- Sometimes it correctly articulates the problem in its descriptions around the code, but then the script itself misses some of the nuances in the problem/logic, doesn't implement what it said at all, or leaves the previous version of the script unchanged or mildly refactored. This get very frustrating.
 - Can I be sure that ChatGPT isn't cheating itself? E.g. does it already have access to other people's answers? E.g. a "What was the problem for Advent of Code 2024, day 1?" prompt causes it to search the internet and return a summary and a link to a YouTube video of someone solving it...
 - Sometimes it asks you to evaluate a new version of ChatGPT by giving two outputs and asking you which you prefer.
 - Day 8 included unused code, but tricky to spot at a first glance.
@@ -84,4 +84,5 @@ Attempts in January 2025 (increased caveats around whether ChatGPT has been upda
 - There might be a better way to prompt it to make edits, but prompts for small changes require generating the whole script (and any prose around it) again, which is pretty slow.
 - On Day 9 it started giving me Chat GPT-4o with Canvas, which gives an editor like environment with a Python runtime and some other features. I'm going to mostly stick to conventional chat style prompting. It generates less text to explain the script in this mode.
 - Sometimes it feels like trying to teach someone who just refuses to learn or is completely missing the point.
-- Sometimes it returns updated functions rather than a whole updated script.
+- Sometimes it returns updated functions rather than a whole updated script. More of an interface issue but it's quite annoying when what you're trying to lazily copy-paste is changing/moving around.
+- Copy-pasting a traceback into a prompt worked _occasionally_.
