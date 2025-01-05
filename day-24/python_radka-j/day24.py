@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 # PARSE INPUT
 
 with open("input.txt") as f:
@@ -45,24 +47,23 @@ print("part 1: ", int(num, 2))
 # ======================================================================================
 # PART 2: ripple adder
 #
-# for each bit have:
-# - 3 inputs: two bits to be added (A and B) and a carry-in C from previous step
+# to add two binary numbers start with the least significant digit (00) and move to the
+# most significant (here 45), at each step have:
+# - 3 inputs: the two bits to be added (A and B) and a carry-in from previous step
 # - 2 outputs: a sum and carry-out
 # where:
 #   - sum = a XOR b XOR carry_in
 #   - carry_out = (a AND b) OR (carry_in AND (a XOR b))
 #
-# computation moves from least significant (00) to most significant bit (here 45)
+# this is what the gates implement, leading to the following pattern:
+#  z00 = x00 XOR y00                  # no carry_in at first step
 #
-# this leads to the following pattern:
-#  z00 = x00 XOR y00                  # no carry_in
-#
-#  z01 = jfw XOR gnj                  # sum of inputs and carry
+#  z01 = jfw XOR gnj                  # sum of inputs at n=1 and carry_in from n=0
 #       gnj = y01 XOR x01             #
-#       jfw = x00 AND y00             # carry_in from previous step (only left hand side
-#                                     # of the OR in carry since there was no carry_in)
+#       jfw = x00 AND y00             # carry_in (only the left hand side of OR in the
+#                                     # carry formula since there was no carry_in at 0)
 #
-#   z02 = ndd XOR jgw                 # a XOR b XOR c
+#   z02 = ndd XOR jgw                 # sum of inputs at n=2 and carry_in from n=1
 #       jgw = y02 XOR x02             #
 #       ndd = ntt OR spq              # carry-in
 #           ntt = x01 AND y01         # left hand side of OR in carry formula
@@ -76,14 +77,18 @@ print("part 1: ", int(num, 2))
 
 # recreate operations iterable since it's been deleted in part 1
 operations = []
+# also keep a simple look-up table of inputs and operations/gates they are passed to
+input_operand_map = defaultdict(list)
 for line in lines[91:]:
     input1, operand, input2, _, res = line.split(" ")
     operations.append([input1, input2, res, operand])
+    input_operand_map[input1].append(operand)
+    input_operand_map[input2].append(operand)
 
 # keep track of grates that don't follow expected pattern
 wrong_gates = set()
 for input1, input2, res, operand in operations:
-    # lets ignore first and last gates to begin with since they are different
+    # lets ignore first and last gates to begin with since they are slightly different
     if not res in ["z00", "z01", "z45"]:
 
         # 1. expect z gates to results from an XOR
@@ -103,18 +108,15 @@ for input1, input2, res, operand in operations:
         # (the only exception is the operation on the first 2 inputs)
         if operand == "AND":
             if input1 not in ["x00", "y00"] and input2 not in ["x00", "y00"]:
-                for next_input1, next_input2, _, next_operand in operations:
-                    if (
-                        next_input1 == res or next_input2 == res
-                    ) and next_operand != "OR":
-                        wrong_gates.add(res)
+                if "OR" not in input_operand_map[res]:
+                    print("check AND", input_operand_map[res])
+                    wrong_gates.add(res)
 
         # 4. an XOR result can feed into another XOR or an AND but not an OR operation
         # (the inputs to OR are only results of AND operations)
         if operand == "XOR":
-            for next_input1, next_input2, _, next_operand in operations:
-                if (next_input1 == res or next_input2 == res) and next_operand == "OR":
-                    wrong_gates.add(res)
-
+            if "OR" in input_operand_map[res]:
+                print("check XOR", input_operand_map[res])
+                wrong_gates.add(res)
 
 print("part 2: ", ",".join(sorted(wrong_gates)))
