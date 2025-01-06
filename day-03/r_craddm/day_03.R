@@ -44,3 +44,4 @@ for (section in all_sections) {
   }
 }
 print(paste("Total:", total))
+

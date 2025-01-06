@@ -33,10 +33,6 @@ for (update in updates) {
         }
         update[page_order] <- update[rev(page_order)]
       }
-      #for (rule_no in seq_along(applicable_rules)) {
-       # page_order <- update[which(update %in% applicable_rules[[rule_no]])]
-        #rule_followed[rule_no] <- all(page_order == applicable_rules[[rule_no]])
-      #}
       if (all(rule_followed)) {
         rules_not_met <- FALSE
       }
