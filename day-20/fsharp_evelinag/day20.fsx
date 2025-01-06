@@ -19,14 +19,6 @@ let input =
     File.ReadAllLines "day-20/fsharp_evelinag/input.txt"
 
 
-// plan 
-// 1. find path, for every step along the way keep how many steps it take to reach E from there
-//    dictionary: position -> distance to E
-// 2. for every step along the path, in all directions (quite a lot of them) change two locations to '.'
-// 3. See how many steps it takes from the new location (after 1 or 2 steps). New distance: from start + 1-2 + to end
-
-// check - recalculate the path
-
 
 open System.Collections.Generic
 
@@ -156,7 +148,7 @@ let savings20 =
 // |> List.sortBy fst
 // |> printfn "%A"
 
-savings2 
+savings20 
 |> List.filter (fun x -> x >= 100)
 |> List.length
 
