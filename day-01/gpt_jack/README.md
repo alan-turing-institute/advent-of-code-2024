@@ -53,7 +53,7 @@ Attempts in December 2024 (attempting to solve one day later):
 | 17  | ✅ | 3 | ✅ | 12 | Part 2 only with a lot of effort and drawing from other people's solutions to tell ChatGPT the way to approach creating a more efficient solution. |
 | 18  | ✅ | 3 | ✅ | 1 | Part 1 it initially failed due to assuming the grid size would be the same as the example. |
 | 19  | ✅ | 3 | ✅ | 1 | Pretty smooth sailing - was able to fix a bug and then speed up part 1 without any hand holding. |
-| 20  | ✅ | 11 | ❌ | 4 | First part 1 prompt gave up generating Python at the end and left some plain text hanging around. Got a very slow solution for part 1 after a lot of going round in loops with prompts that resulted in either a slow script or a script that returned 0. Quickly ran out of patience for part 2 after it was again much too slow. |
+| 20  | ✅ | 11 | ❌ | 4 | First part 1 prompt gave up generating Python at the end and left some plain text hanging around. Got a very slow solution for part 1 after a lot of going round in loops with prompts that resulted in either a slow script or a script that returned 0. Quickly ran out of patience for part 2 after it was again much too slow or returning zero. |
 | 21  |  |  |  |  |  |
 | 22  |  |  |  |  |  |
 | 23  |  |  |  |  |  |
