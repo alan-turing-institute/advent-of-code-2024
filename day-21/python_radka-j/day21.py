@@ -49,13 +49,16 @@ def get_neighbours(pos, keypad):
 
 def get_shortest_paths(source_pos, target_pos, keypad):
     """
-    Want to know: if the robot arm is currently above some "source" button -> what moves
-    does the controlling arm have to make to get it to press the "target" button.
+    Want to know: if the robot arm is currently above some "source" button, what buttons
+    does the controlling arm above it have to use to get it to press the "target" button.
 
-    Returns all _shortest_ paths between the source and target characters on the keypad.
+    Returns all _shortest_ paths between the source and target characters on the keypad
+    using depth first search.
 
     The input here are POSITIONS of the source and target on the keypad, but we return
     the paths as a sequence of directional characters ("<>v^") followed by "A".
+
+    For example, to get from A->5 on the numeric keypad retuns: ['<^^A', '^<^A', '^^<A']
     """
     # get ALL paths
     paths = []
@@ -80,61 +83,68 @@ def get_shortest_paths(source_pos, target_pos, keypad):
 cache = {}
 
 
-def input_code(code, keypads, level=0):
+def input_sequence(sequence, depth=0, n_directional_keypads=3):
     """
-    Returns number of button presses required to input the given code using the provided
-    number of keypads:
-    - start at the numeric keypad (level=0) and move up as many keypads as have
-    - for each of the shortest paths between 2 buttons, get the number of button presses
-      required on the keyboard above it to move the arm between them and pick the minimum
-    - cache best moves at each level as go along
+    Returns number of button presses required to input the given sequence of characters
+    using the provided number of directional keypads:
+    - start at the numeric keypad (depth=0) and move up as many directional keypads as
+      have (the last directional keypad is operated by the human arm)
+    - for each of the shortest paths between 2 characters in the sequence (i.e., buttons
+      on the keypad), get the number of button presses required on the keyboard above it
+      to move the arm between that sequence and recurse up to find the mininum required
+    - cache shortest moves between character sequences at each depth as go along (part 2)
     """
-    if (code, level) in cache:
-        return cache[(code, level)]
 
-    # last level is a human arm --> just type in the given sequence (each char = 1 move)
-    if level == len(keypads):
-        return len(code)
+    if (sequence, depth) in cache:
+        return cache[(sequence, depth)]
+
+    # last depth is a human arm --> just type in the given sequence (each char = 1 move)
+    if depth == n_directional_keypads:
+        return len(sequence)
+
+    # only the first keypad is numeric, all other are directional
+    if depth == 0:
+        keypad = numeric_keypad
+    else:
+        keypad = directional_keypad
 
     # keypads are defined as {pos: char} but want to also access {char: pos}
-    keypad = keypads[level]
     inv_keypad = {v: k for k, v in keypad.items()}
 
     # robot arm always starts above the A button
     source_pos = inv_keypad["A"]
 
     total_button_presses = 0
-    for char in code:
+    for char in sequence:
         target_pos = inv_keypad[char]
 
         shortest_paths = get_shortest_paths(source_pos, target_pos, keypad)
         count_path_button_presses = [
-            input_code(path, keypads, level + 1) for path in shortest_paths
+            input_sequence(path, depth + 1, n_directional_keypads)
+            for path in shortest_paths
         ]
         total_button_presses += min(count_path_button_presses)
         source_pos = target_pos
 
-    cache[(code, level)] = total_button_presses
+    cache[(sequence, depth)] = total_button_presses
     return total_button_presses
 
 
-def calculate_score(codes, keypads):
+def calculate_score(codes, n_directional_keypads=3):
     tot_sum = 0
     for code in codes:
-        score = input_code(code, keypads)
+        score = input_sequence(code, n_directional_keypads=n_directional_keypads)
         tot_sum += score * int(code[:-1])
     return tot_sum
 
 
-codes = ["140A", "143A", "349A", "582A", "964A"]
 # codes = ["029A", "980A", "179A", "456A", "379A"]
+codes = ["140A", "143A", "349A", "582A", "964A"]
 
 # PART 1
 cache = {}
-keypads = [numeric_keypad, directional_keypad, directional_keypad]
-print("part 1:", calculate_score(codes, keypads))
+print("part 1:", calculate_score(codes))
 
 # PART 2
 cache = {}
-keypads2 = [numeric_keypad] + [directional_keypad] * 25
-print("part 1:", calculate_score(codes, keypads2))
+print("part 1:", calculate_score(codes, n_directional_keypads=26))
